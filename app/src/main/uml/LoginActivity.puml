@@ -1,0 +1,57 @@
+@startuml
+
+mainframe ad Login fields validation
+'left to right direction
+skinparam nodesep 20
+skinparam ranksep 5
+
+' Исправить на открытие экрана
+(*) --> "Enter library root URL"
+--> "Enter username"
+--> "Enter password"
+
+--> "Check library root field"
+
+--> if "Library root field is empty" then
+    -->[true] "Ask user to fill the field"
+    --> "Enter library root URL"
+else
+    -->[false] "Validate library root URL"
+
+    if "Library root URL is not valid" then
+        -->[true] "Ask user to enter valid URL"
+        --> "Enter library root URL"
+    else
+        -->[false] "Check credentials"
+        if "Username and password fields are empty" then
+            -->[true] "Connect using public mode"
+            --> (*)
+        else
+            -->[false] "Check username field"
+            if "Username field is empty"
+                -->[true] "Ask user to enter username"
+                --> "Enter username"
+            else
+                -->[false] "Check password field"
+                if "Password field is empty" then
+                    -->[true] "Ask user to enter password"
+                    --> "Enter password"
+                else
+                    -->[false] "Connect using private mode"
+                endif
+            endif
+        endif
+    endif
+endif
+
+
+
+
+--> (*)
+
+
+
+
+
+
+@enduml

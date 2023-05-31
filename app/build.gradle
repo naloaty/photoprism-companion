@@ -1,0 +1,128 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "org.jetbrains.kotlin.kapt"
+    id "org.jetbrains.kotlin.plugin.serialization" version "$kotlinVersion"
+    id "androidx.navigation.safeargs.kotlin"
+    id "com.google.protobuf"
+    id "kotlin-parcelize"
+}
+
+android {
+    namespace 'me.naloaty.photoprism'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "me.naloaty.photoprism"
+        minSdk 26
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    kapt {
+        generateStubs true
+    }
+}
+
+dependencies {
+    // Default dependencies
+    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$testExtJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    // Kotlin serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$serializationConverterVersion"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+
+    // ViewBinding Property delegate
+    implementation "com.github.kirich1409:viewbindingpropertydelegate-full:$viewBindingDelegateVersion"
+
+    // Fragment kotlin extensions
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+
+    // Timber (logger)
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+
+    // Navigation Component
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Fast scroll
+    implementation "me.zhanghai.android.fastscroll:library:$fastScrollVersion"
+
+    // DataStore Protocol Buffer
+    implementation "androidx.datastore:datastore-core:$dataStoreVersion"
+
+    //Protobuf
+    implementation "com.google.protobuf:protobuf-lite:$protobufVersion"
+
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
+    }
+
+    plugins {
+        javalite {
+            artifact = "com.google.protobuf:protoc-gen-javalite:$protobufVersion"
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite { }
+            }
+        }
+    }
+}

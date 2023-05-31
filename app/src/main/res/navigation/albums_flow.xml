@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/albums_flow"
+    app:startDestination="@id/albums_fragment">
+
+    <fragment
+        android:id="@+id/albums_fragment"
+        android:name="me.naloaty.photoprism.features.albums.presentation.AlbumsFragment"
+        android:label="fragment_albums"
+        tools:layout="@layout/fragment_albums" >
+        <action
+            android:id="@+id/action_view_album_content"
+            app:destination="@id/album_content_fragment"
+            app:enterAnim="@anim/zoom_in_enter"
+            app:exitAnim="@anim/zoom_in_exit"
+            app:popEnterAnim="@anim/zoom_out_enter"
+            app:popExitAnim="@anim/zoom_out_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/album_content_fragment"
+        android:name="me.naloaty.photoprism.features.gallery.presentation.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery" >
+        <argument
+            android:name="albumUid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+</navigation>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_flow"
+    app:startDestination="@id/gallery_fragment">
+
+    <fragment
+        android:id="@+id/gallery_fragment"
+        android:name="me.naloaty.photoprism.features.gallery.presentation.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <include
+        app:graph="@navigation/albums_flow" />
+
+
+</navigation>

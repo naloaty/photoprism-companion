@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/gallery_fragment"
+        android:icon="@drawable/photos_selector"
+        android:title="@string/menu_item_photos" />
+
+    <item
+        android:id="@+id/albums_flow"
+        android:icon="@drawable/albums_selector"
+        android:title="@string/menu_item_albums" />
+</menu>
