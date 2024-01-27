@@ -22,7 +22,6 @@ import me.naloaty.photoprism.features.albums.presentation.recycler.AlbumsAdapter
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import me.naloaty.photoprism.navigation.navigateSafely
 import timber.log.Timber
-import javax.inject.Inject
 
 
 class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
@@ -31,8 +30,8 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
     private val viewBinding: FragmentAlbumsBinding by viewBinding()
     private val flowViewModel: BottomNavViewModel by flowFragmentViewModel()
 
-    @Inject lateinit var albumsPagingAdapter: AlbumsAdapter
-    @Inject lateinit var albumsFooterAdapter: LoadStateAdapter
+    private val albumsPagingAdapter = AlbumsAdapter()
+    private val albumsFooterAdapter = LoadStateAdapter()
 
     private val galleryConcatAdapter by lazy {
         albumsPagingAdapter.withLoadStateFooter(

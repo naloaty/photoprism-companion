@@ -1,21 +1,16 @@
 package me.naloaty.photoprism.features.gallery.presentation.recycler
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.databinding.LiGalleryMediaItemBinding
-import me.naloaty.photoprism.di.fragment.FragmentScope
 import me.naloaty.photoprism.features.gallery.presentation.model.GalleryListItem
-import javax.inject.Inject
 
-@FragmentScope
-class GalleryAdapter @Inject constructor() :
-    PagingDataAdapter<GalleryListItem, RecyclerView.ViewHolder>(
-        GalleryDiffCallback()
-    ) {
+class GalleryAdapter : PagingDataAdapter<GalleryListItem, RecyclerView.ViewHolder>(
+    GalleryDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

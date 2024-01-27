@@ -6,12 +6,8 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.databinding.LiLoadStateBinding
-import me.naloaty.photoprism.di.fragment.FragmentScope
-import javax.inject.Inject
 
-@FragmentScope
-class LoadStateAdapter @Inject constructor() :
-    LoadStateAdapter<LoadStateViewHolder>() {
+class LoadStateAdapter : LoadStateAdapter<LoadStateViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
