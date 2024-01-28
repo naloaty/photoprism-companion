@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import me.naloaty.photoprism.databinding.LayoutCommonErrorBinding
 import timber.log.Timber
+
+private val TRANSITION_DURATION = 150L
 
 class LoadStateRenderer(
     private val root: ViewGroup,
@@ -52,8 +56,9 @@ class LoadStateRenderer(
         }
     }
 
+    @OptIn(FlowPreview::class)
     suspend fun render() {
-        state.collectLatest { state ->
+        state.debounce(TRANSITION_DURATION).collectLatest { state ->
             when (state) {
                 State.LOADING -> renderLoadingState()
                 State.CONTENT -> renderContentState()
@@ -113,8 +118,10 @@ class LoadStateRenderer(
     }
 
     private fun prepareAnimation() {
+        TransitionManager.endTransitions(root)
+
         val transition = AutoTransition().apply {
-            duration = 300
+            duration = TRANSITION_DURATION
             addTarget(emptyView)
             addTarget(loadingView)
             addTarget(errorView)
