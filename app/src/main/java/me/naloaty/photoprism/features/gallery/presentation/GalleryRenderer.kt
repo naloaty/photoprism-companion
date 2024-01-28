@@ -1,10 +1,10 @@
 package me.naloaty.photoprism.features.gallery.presentation
 
 import android.content.Context
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.common.extension.withLoadStateFooter
 import me.naloaty.photoprism.common.recycler.LoadStateAdapter
+import me.naloaty.photoprism.common.recycler.LoadStateRenderer
+import me.naloaty.photoprism.common.recycler.initCommonError
 import me.naloaty.photoprism.databinding.FragmentGalleryBinding
 import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
@@ -36,6 +38,17 @@ class GalleryRenderer(
 
     private val galleryPagingAdapter = GalleryAdapter()
     private val galleryFooterAdapter = LoadStateAdapter()
+
+    private val loadStateRenderer = LoadStateRenderer(
+        root = binding.root,
+        emptyView = binding.emptyGroup.root,
+        loadingView = binding.loadingGroup.root,
+        errorView = binding.errorGroup.root,
+        contentView = binding.rvGallery,
+        onFallbackToCache = {
+            Toast.makeText(context, "Ошибка блять", Toast.LENGTH_LONG).show()
+        }
+    )
 
     private val galleryConcatAdapter by lazy {
         galleryPagingAdapter.withLoadStateFooter(
@@ -61,6 +74,8 @@ class GalleryRenderer(
             Timber.d("albumUid=$albumUid")
         }
 
+        initCommonError(errorGroup, onRetry = galleryPagingAdapter::retry)
+
         with(viewLifecycleOwner.lifecycleScope) {
             launch {
                 galleryViewModel.searchQueryResult.collectLatest {
@@ -69,15 +84,13 @@ class GalleryRenderer(
             }
 
             launch {
-                galleryPagingAdapter.loadStateFlow.collectLatest { loadState ->
-                    when (val currentState = loadState.mediator?.refresh) {
-                        is LoadState.Error -> {
-                            currentState.error
-                        }
-
-                        else -> {}
-                    }
+                galleryPagingAdapter.loadStateFlow.collectLatest { state ->
+                    loadStateRenderer.update(state, galleryPagingAdapter.itemCount)
                 }
+            }
+
+            launch {
+                loadStateRenderer.render()
             }
         }
 
@@ -87,8 +100,8 @@ class GalleryRenderer(
 
 //        val viewHelper = PagingRecyclerViewHelper(rvGallery)
 //
-//        viewLifecycleOwner.lifecycleScope.launch(dispatchers.io) {
-//            viewModel.searchQueryResultCount.collectLatest {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            galleryViewModel.searchQueryResultCount.collectLatest {
 //                viewHelper.updateItemCount(it)
 //            }
 //        }

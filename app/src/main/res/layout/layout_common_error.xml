@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35"
         app:layout_constraintWidth_percent="0.4"
-        app:tint="?colorPrimaryVariant" />
+        app:tint="?colorError" />
 
     <TextView
         android:id="@+id/tv_description"
@@ -31,10 +31,11 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
 
     <com.google.android.material.button.MaterialButton
+        style="?attr/materialButtonOutlinedStyle"
         android:id="@+id/btn_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="24dp"
         android:text="@string/retry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

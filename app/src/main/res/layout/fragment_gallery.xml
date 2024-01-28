@@ -20,7 +20,22 @@
         android:id="@+id/error_group"
         layout="@layout/layout_common_error"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/loading_group"
+        layout="@layout/layout_common_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/empty_group"
+        layout="@layout/layout_common_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
