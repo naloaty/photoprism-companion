@@ -13,6 +13,6 @@
     <alpha
         android:duration="@integer/zoom_animation_time"
         android:interpolator="@android:anim/decelerate_interpolator"
-        android:fromAlpha="1"
+        android:fromAlpha="0.4"
         android:toAlpha="0"/>
 </set>

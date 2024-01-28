@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35"
         app:layout_constraintWidth_percent="0.4"
-        app:tint="?colorError" />
+        app:tint="@color/design_default_color_error" />
 
     <TextView
         android:id="@+id/tv_description"
