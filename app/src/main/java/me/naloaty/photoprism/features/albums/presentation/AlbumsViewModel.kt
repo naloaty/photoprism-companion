@@ -2,14 +2,13 @@ package me.naloaty.photoprism.features.albums.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import me.naloaty.photoprism.features.albums.domain.model.Album
+import kotlinx.coroutines.flow.shareIn
 import me.naloaty.photoprism.features.albums.domain.model.AlbumSearchQuery
 import me.naloaty.photoprism.features.albums.domain.usecase.GetSearchResultUseCase
 import javax.inject.Inject
@@ -32,10 +31,9 @@ class AlbumsViewModel @Inject constructor(
     private val searchQueryFlow = MutableStateFlow(AlbumSearchQuery(ALL_ALBUMS_QUERY))
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val searchQueryResult: Flow<PagingData<Album>>
-        get() = searchQueryFlow.flatMapLatest { query ->
-            getSearchResultsUseCase(query).cachedIn(viewModelScope)
-        }
+    val searchQueryResult = searchQueryFlow.flatMapLatest { query ->
+        getSearchResultsUseCase(query).cachedIn(viewModelScope)
+    }.shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
 
 
     private val _applySearchButtonEnabled = MutableStateFlow(false)
