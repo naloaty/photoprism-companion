@@ -29,10 +29,7 @@ class LoadStateRenderer(
 
 
     fun update(states: CombinedLoadStates, itemCount: Int) {
-        val mediator = checkNotNull(states.mediator) {
-            "LoadStateManager does not support paging setup without mediator"
-        }
-
+        val mediator = states.mediator ?: return // Items flush
         val source = states.source
 
         // Room делает refresh при любом изменении
@@ -40,6 +37,7 @@ class LoadStateRenderer(
         val cacheIsIdle = source.refresh.isNotLoading
         val remoteAtTheEnd = mediator.append.isNotLoading && mediator.append.endOfPaginationReached
         val remoteError = mediator.refresh.isError || mediator.append.isError
+        val remoteIsRefreshing = mediator.refresh.isLoading
 
         if (itemCount > 0) {
             if (remoteError) {
@@ -52,8 +50,17 @@ class LoadStateRenderer(
                 cacheIsUpdating -> state.tryEmit(State.LOADING)
                 cacheIsIdle && remoteAtTheEnd -> state.tryEmit(State.EMPTY)
                 cacheIsIdle && remoteError -> state.tryEmit(State.ERROR)
+                cacheIsIdle && remoteIsRefreshing -> state.tryEmit(State.LOADING)
             }
         }
+    }
+
+    fun reset() {
+        Timber.d("Reset")
+        emptyView.isVisible = false
+        loadingView.isVisible = false
+        errorView.isVisible = false
+        contentView.isVisible = true
     }
 
     @OptIn(FlowPreview::class)
@@ -125,7 +132,6 @@ class LoadStateRenderer(
             addTarget(emptyView)
             addTarget(loadingView)
             addTarget(errorView)
-            addTarget(contentView)
         }
 
         TransitionManager.beginDelayedTransition(root, transition)

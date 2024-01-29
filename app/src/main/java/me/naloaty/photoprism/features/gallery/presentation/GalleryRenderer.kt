@@ -154,6 +154,13 @@ class GalleryRenderer(
             if (SearchView.TransitionState.SHOWING == newState) {
                 bottomNavViewModel.onSearchViewShowing()
             }
+
+            if (
+                SearchView.TransitionState.SHOWING == previousState &&
+                SearchView.TransitionState.SHOWN == newState
+            ) {
+                loadStateRenderer.reset()
+            }
         }
 
         searchViewContent.btnApply.setOnClickListener {
