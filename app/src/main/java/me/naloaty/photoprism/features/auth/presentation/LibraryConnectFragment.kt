@@ -3,7 +3,6 @@ package me.naloaty.photoprism.features.auth.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -32,7 +31,6 @@ class LibraryConnectFragment: BaseFragment(R.layout.fragment_library_connect) {
         observeAuthState()
         setValidationErrorsResetListeners()
     }
-
 
     private fun setupConnectButton() {
         viewBinding.btnConnect.setOnClickListener {

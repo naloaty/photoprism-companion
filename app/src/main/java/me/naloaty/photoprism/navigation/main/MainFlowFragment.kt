@@ -1,6 +1,10 @@
 package me.naloaty.photoprism.navigation.main
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.annotation.AnimRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -41,9 +45,24 @@ class MainFlowFragment : BaseFlowFragment(
         flowFragmentComponent.inject(this)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setupSoftInputMode()
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onStart() {
         super.onStart()
         setupBottomNavigation()
+    }
+
+    private fun setupSoftInputMode() {
+        requireActivity().window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
     }
 
     override fun setupNavigation(navController: NavController) = with(viewBinding) {
