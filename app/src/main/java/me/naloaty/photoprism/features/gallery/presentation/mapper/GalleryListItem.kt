@@ -4,7 +4,7 @@ import me.naloaty.photoprism.R
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.presentation.model.GalleryListItem
 
-fun MediaItem.toGalleryListItem() =
+fun MediaItem.toGalleryListItem(): GalleryListItem =
     GalleryListItem.Media(
         uid = this.uid,
         typeIcon = when (this) {

@@ -46,7 +46,7 @@ class GalleryRenderer(
         errorView = binding.errorGroup.root,
         contentView = binding.rvGallery,
         onFallbackToCache = {
-            Toast.makeText(context, "Ошибка блять", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Results from cache", Toast.LENGTH_LONG).show()
         }
     )
 
