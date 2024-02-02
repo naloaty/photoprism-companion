@@ -1,9 +1,9 @@
 package me.naloaty.photoprism.di.session.module
 
 import androidx.lifecycle.ViewModel
-import dagger.Binds
-import dagger.Module
-import dagger.multibindings.IntoMap
+import com.yandex.yatagan.Binds
+import com.yandex.yatagan.IntoMap
+import com.yandex.yatagan.Module
 import me.naloaty.photoprism.di.session.qualifier.SessionViewModels
 import me.naloaty.photoprism.di.viewmodel.ViewModelKey
 import me.naloaty.photoprism.features.albums.presentation.AlbumsViewModel

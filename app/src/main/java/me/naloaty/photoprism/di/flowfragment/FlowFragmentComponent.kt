@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.di.flowfragment
 
-import dagger.BindsInstance
-import dagger.Subcomponent
+import com.yandex.yatagan.BindsInstance
+import com.yandex.yatagan.Component
 import me.naloaty.photoprism.base.BaseFlowFragment
 import me.naloaty.photoprism.di.flowfragment.module.FlowFragmentModule
 import me.naloaty.photoprism.di.flowfragment.module.FlowFragmentViewModelModule
@@ -9,7 +9,8 @@ import me.naloaty.photoprism.di.fragment.FragmentComponent
 import me.naloaty.photoprism.navigation.main.MainFlowFragment
 
 @FlowFragmentScope
-@Subcomponent(
+@Component(
+    isRoot = false,
     modules = [
         FlowFragmentModule::class,
         FlowFragmentViewModelModule::class
@@ -18,12 +19,12 @@ import me.naloaty.photoprism.navigation.main.MainFlowFragment
 interface FlowFragmentComponent {
 
     fun viewModelFactory(): FlowFragmentViewModelFactory
-    fun fragmentComponentFactory(): FragmentComponent.Factory
+    fun fragmentComponentFactory(): FragmentComponent.Builder
 
     fun inject(fragment: MainFlowFragment)
 
-    @Subcomponent.Factory
-    interface Factory {
+    @Component.Builder
+    interface Builder {
         fun create(
             @BindsInstance fragment: BaseFlowFragment
         ): FlowFragmentComponent

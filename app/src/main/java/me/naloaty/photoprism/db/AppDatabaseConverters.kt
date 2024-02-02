@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import java.time.Instant
-import java.util.Date
 
 object AppDatabaseConverters {
 

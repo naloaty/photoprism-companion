@@ -2,9 +2,7 @@ package me.naloaty.photoprism.features.auth.domain.usecase
 
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.features.auth.data.LibraryAccountRepository
-import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountCredentials
-import me.naloaty.photoprism.features.auth.domain.model.LibraryConnectParams
 import javax.inject.Inject
 
 @AppScope

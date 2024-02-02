@@ -3,7 +3,6 @@ package me.naloaty.photoprism.features.gallery.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
-import java.time.Instant
 
 @Entity(
     tableName = "gallery_search_result_cross_ref",

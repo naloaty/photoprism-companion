@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.di.session.module
 
-import dagger.Module
-import dagger.Provides
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import me.naloaty.photoprism.di.fragmentwithsession.FragmentWithSessionComponent
 import me.naloaty.photoprism.di.session.SessionScope
 import me.naloaty.photoprism.di.session.qualifier.ApiUrl

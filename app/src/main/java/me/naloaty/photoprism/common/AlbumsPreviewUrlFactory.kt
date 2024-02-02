@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.common
 
-import me.naloaty.photoprism.di.session.qualifier.ApiUrl
 import me.naloaty.photoprism.di.session.SessionScope
+import me.naloaty.photoprism.di.session.qualifier.ApiUrl
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession
 import javax.inject.Inject
 

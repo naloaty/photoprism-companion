@@ -1,14 +1,16 @@
 package me.naloaty.photoprism
 
 import android.app.Application
+import androidx.viewbinding.BuildConfig
 import com.google.android.material.color.DynamicColors
-import me.naloaty.photoprism.di.app.DaggerAppComponent
+import com.yandex.yatagan.Yatagan
+import me.naloaty.photoprism.di.app.AppComponent
 import timber.log.Timber
 
 class App : Application() {
 
     val appComponent by lazy {
-        DaggerAppComponent.factory().create(
+        Yatagan.builder(AppComponent.Builder::class.java).create(
             application = this
         )
     }

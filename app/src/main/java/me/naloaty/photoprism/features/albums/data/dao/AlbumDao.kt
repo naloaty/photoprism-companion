@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import me.naloaty.photoprism.features.albums.data.entity.AlbumDbEntity
-import me.naloaty.photoprism.features.albums.domain.model.Album
 
 @Dao
 interface AlbumDao {

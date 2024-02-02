@@ -12,17 +12,17 @@ import me.naloaty.photoprism.features.albums.data.entity.AlbumDbEntity
 import me.naloaty.photoprism.features.albums.data.entity.AlbumSearchQueryDbEntity
 import me.naloaty.photoprism.features.albums.data.entity.AlbumSearchResultCrossRef
 import me.naloaty.photoprism.features.albums.data.entity.AlbumSearchResultRemoteKey
-import me.naloaty.photoprism.features.gallery.data.dao.MediaFileDao
-import me.naloaty.photoprism.features.gallery.data.dao.MediaItemDao
+import me.naloaty.photoprism.features.gallery.data.dao.GallerySearchQueryDao
 import me.naloaty.photoprism.features.gallery.data.dao.GallerySearchResultCrossRefDao
 import me.naloaty.photoprism.features.gallery.data.dao.GallerySearchResultDao
-import me.naloaty.photoprism.features.gallery.data.dao.GallerySearchQueryDao
 import me.naloaty.photoprism.features.gallery.data.dao.GallerySearchResultRemoteKeyDao
+import me.naloaty.photoprism.features.gallery.data.dao.MediaFileDao
+import me.naloaty.photoprism.features.gallery.data.dao.MediaItemDao
+import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchQueryDbEntity
+import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultCrossRef
+import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultRemoteKey
 import me.naloaty.photoprism.features.gallery.data.entity.MediaFileDbEntity
 import me.naloaty.photoprism.features.gallery.data.entity.MediaItemDbEntity
-import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultCrossRef
-import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchQueryDbEntity
-import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultRemoteKey
 
 @Database(
     version = 1,

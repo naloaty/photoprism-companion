@@ -2,11 +2,11 @@ package me.naloaty.photoprism.di.app.module
 
 import android.content.Context
 import androidx.room.Room
-import dagger.Module
-import dagger.Provides
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import me.naloaty.photoprism.db.AppDatabase
-import me.naloaty.photoprism.di.app.qualifier.AppContext
 import me.naloaty.photoprism.di.app.AppScope
+import me.naloaty.photoprism.di.app.qualifier.AppContext
 
 @Module
 interface DatabaseModule {

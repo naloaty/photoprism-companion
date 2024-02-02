@@ -8,8 +8,8 @@ import android.content.Context
 import android.os.Bundle
 import kotlinx.coroutines.runBlocking
 import me.naloaty.photoprism.api.endpoint.session.model.PhotoPrismSession
-import me.naloaty.photoprism.di.service.qualifier.ServiceContext
 import me.naloaty.photoprism.di.service.ServiceScope
+import me.naloaty.photoprism.di.service.qualifier.ServiceContext
 import me.naloaty.photoprism.features.auth.data.PhotoPrismAuthenticator
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession

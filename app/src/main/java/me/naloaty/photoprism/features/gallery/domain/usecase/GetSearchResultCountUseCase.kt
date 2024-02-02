@@ -1,7 +1,5 @@
 package me.naloaty.photoprism.features.gallery.domain.usecase
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.withContext
 import me.naloaty.photoprism.di.session.SessionScope
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository

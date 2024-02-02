@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import me.naloaty.photoprism.features.albums.data.entity.AlbumSearchResultRemoteKey
-import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultRemoteKey
 
 @Dao
 interface AlbumSearchResultRemoteKeyDao {

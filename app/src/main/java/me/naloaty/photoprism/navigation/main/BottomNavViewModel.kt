@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.navigation.main.model.ViewState
-import javax.inject.Inject
 
 class BottomNavViewModel: ViewModel()  {
     private val _bottomNavigationState = MutableStateFlow<ViewState>(ViewState.Shown(null))

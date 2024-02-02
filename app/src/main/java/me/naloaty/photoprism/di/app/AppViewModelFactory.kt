@@ -3,7 +3,6 @@ package me.naloaty.photoprism.di.app
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import me.naloaty.photoprism.di.app.qualifier.AppViewModels
-import me.naloaty.photoprism.di.session.qualifier.SessionViewModels
 import javax.inject.Inject
 import javax.inject.Provider
 

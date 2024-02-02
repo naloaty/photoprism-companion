@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import me.naloaty.photoprism.features.albums.data.entity.AlbumSearchResultCrossRef
-import java.time.Instant
 
 @Dao
 interface AlbumSearchResultCrossRefDao {

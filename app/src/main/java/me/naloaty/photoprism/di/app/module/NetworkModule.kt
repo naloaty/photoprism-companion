@@ -1,15 +1,14 @@
 package me.naloaty.photoprism.di.app.module
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import dagger.Module
-import dagger.Provides
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import me.naloaty.photoprism.api.endpoint.session.service.PhotoPrismSessionService
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.di.app.qualifier.GlobalRetrofit
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.create
 

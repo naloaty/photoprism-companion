@@ -4,9 +4,9 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.features.auth.data.datasource.ActiveAccountDataSource
-import me.naloaty.photoprism.features.auth.domain.toLibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountCredentials
+import me.naloaty.photoprism.features.auth.domain.toLibraryAccount
 import javax.inject.Inject
 
 @AppScope

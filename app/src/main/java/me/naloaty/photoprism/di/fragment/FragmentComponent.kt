@@ -1,16 +1,16 @@
 package me.naloaty.photoprism.di.fragment
 
-import dagger.Subcomponent
+import com.yandex.yatagan.Component
 import me.naloaty.photoprism.features.auth.presentation.LibraryConnectFragment
 
 @FragmentScope
-@Subcomponent
+@Component(isRoot = false)
 interface FragmentComponent {
 
     fun inject(fragment: LibraryConnectFragment)
 
-    @Subcomponent.Factory
-    interface Factory {
+    @Component.Builder
+    interface Builder {
         fun create(): FragmentComponent
     }
 }

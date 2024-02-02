@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.di.viewmodel
 
 import androidx.lifecycle.ViewModel
-import dagger.MapKey
+import com.yandex.yatagan.IntoMap
 import kotlin.reflect.KClass
 
 @Target(
@@ -9,5 +9,5 @@ import kotlin.reflect.KClass
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER
 )
-@MapKey
+@IntoMap.Key
 annotation class ViewModelKey(val value: KClass<out ViewModel>)

@@ -1,9 +1,9 @@
 package me.naloaty.photoprism.features.albums.data.mapper
 
 import me.naloaty.photoprism.api.endpoint.albums.model.PhotoPrismAlbum
+import me.naloaty.photoprism.common.PreviewUrlFactory
 import me.naloaty.photoprism.features.albums.data.entity.AlbumDbEntity
 import me.naloaty.photoprism.features.albums.domain.model.Album
-import me.naloaty.photoprism.common.PreviewUrlFactory
 
 /**
  * PhotoPrism -> Database

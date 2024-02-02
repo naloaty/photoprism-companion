@@ -2,7 +2,6 @@ package me.naloaty.photoprism.features.auth.data
 
 import android.accounts.Account
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
-import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountCredentials
 import java.net.URI
 
 fun LibraryAccount.managerName(): String {

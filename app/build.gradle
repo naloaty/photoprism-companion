@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
@@ -57,9 +60,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 
-    // Dagger
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    // Yatagan
+    // api("com.yandex.yatagan:api-dynamic:$yataganVersion")
+    api("com.yandex.yatagan:api-compiled:$yataganVersion")
+    kapt("com.yandex.yatagan:processor-jap:$yataganVersion")
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -102,4 +106,12 @@ dependencies {
 
     // DataStore
     implementation "androidx.datastore:datastore-core:$dataStoreVersion"
+}
+
+tasks.withType(KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += [
+            "-Xopt-in=com.yandex.yatagan.ConditionsApi"
+        ]
+    }
 }

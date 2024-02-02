@@ -3,16 +3,11 @@ package me.naloaty.photoprism.base
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Build
-import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavArgs
-import androidx.navigation.NavArgsLazy
-import androidx.navigation.fragment.navArgs
 
 
 inline fun <reified VM : ViewModel> BaseFragment.flowFragmentViewModels() = viewModels<VM> {

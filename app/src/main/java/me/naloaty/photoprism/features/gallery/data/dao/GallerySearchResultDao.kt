@@ -6,8 +6,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import me.naloaty.photoprism.db.AppDatabase
-import me.naloaty.photoprism.features.gallery.data.compound.MediaItemDbCompound
 import me.naloaty.photoprism.features.gallery.data.compound.GallerySearchResultDbCompound
+import me.naloaty.photoprism.features.gallery.data.compound.MediaItemDbCompound
 import me.naloaty.photoprism.features.gallery.data.entity.GallerySearchResultCrossRef
 import java.time.Instant
 

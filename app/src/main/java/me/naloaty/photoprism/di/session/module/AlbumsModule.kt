@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.di.session.module
 
-import dagger.Binds
-import dagger.Module
+import com.yandex.yatagan.Binds
+import com.yandex.yatagan.Module
 import me.naloaty.photoprism.features.albums.data.AlbumRepositoryImpl
 import me.naloaty.photoprism.features.albums.domain.repository.AlbumRepository
 

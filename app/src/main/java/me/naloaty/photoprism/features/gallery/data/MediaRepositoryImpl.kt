@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 import me.naloaty.photoprism.common.DownloadUrlFactory
 import me.naloaty.photoprism.common.PreviewUrlFactory
 import me.naloaty.photoprism.db.AppDatabase
-import me.naloaty.photoprism.di.session.qualifier.MediaUrlFactory
 import me.naloaty.photoprism.di.session.SessionScope
+import me.naloaty.photoprism.di.session.qualifier.MediaUrlFactory
 import me.naloaty.photoprism.features.gallery.data.mapper.toMediaItem
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem

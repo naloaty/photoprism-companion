@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.api.endpoint.media.service
 
-import me.naloaty.photoprism.api.endpoint.media.model.PhotoPrismMediaItem
 import me.naloaty.photoprism.api.endpoint.PhotoPrismOrder
+import me.naloaty.photoprism.api.endpoint.media.model.PhotoPrismMediaItem
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,7 +1,7 @@
 package me.naloaty.photoprism.di.activity
 
-import dagger.BindsInstance
-import dagger.Subcomponent
+import com.yandex.yatagan.BindsInstance
+import com.yandex.yatagan.Component
 import me.naloaty.photoprism.AppActivity
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.di.activity.module.ActivityModule
@@ -11,7 +11,8 @@ import me.naloaty.photoprism.di.session.SessionComponent
 
 
 @ActivityScope
-@Subcomponent(
+@Component(
+    isRoot = false,
     modules = [
         ActivityModule::class
     ]
@@ -19,13 +20,13 @@ import me.naloaty.photoprism.di.session.SessionComponent
 interface ActivityComponent {
 
     fun appComponent(): AppComponent
-    fun flowFragmentComponentFactory(): FlowFragmentComponent.Factory
-    fun sessionComponentFactory(): SessionComponent.Factory
+    fun flowFragmentComponentFactory(): FlowFragmentComponent.Builder
+    fun sessionComponentFactory(): SessionComponent.Builder
 
     fun inject(activity: AppActivity)
 
-    @Subcomponent.Factory
-    interface Factory {
+    @Component.Builder
+    interface Builder {
         fun create(
             @BindsInstance activity: BaseActivity
         ): ActivityComponent

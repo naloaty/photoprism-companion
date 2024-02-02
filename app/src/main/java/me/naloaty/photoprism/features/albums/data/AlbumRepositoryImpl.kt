@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.naloaty.photoprism.common.PreviewUrlFactory
 import me.naloaty.photoprism.db.AppDatabase
-import me.naloaty.photoprism.di.session.qualifier.AlbumsUrlFactory
 import me.naloaty.photoprism.di.session.SessionScope
+import me.naloaty.photoprism.di.session.qualifier.AlbumsUrlFactory
 import me.naloaty.photoprism.features.albums.data.mapper.toAlbum
 import me.naloaty.photoprism.features.albums.domain.model.Album
 import me.naloaty.photoprism.features.albums.domain.model.AlbumSearchQuery
