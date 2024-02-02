@@ -4,7 +4,6 @@ plugins {
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.serialization" version "$kotlinVersion"
     id "androidx.navigation.safeargs.kotlin"
-    id "com.google.protobuf"
     id "kotlin-parcelize"
 }
 
@@ -97,37 +96,10 @@ dependencies {
     // Fast scroll
     implementation "me.zhanghai.android.fastscroll:library:$fastScrollVersion"
 
-    // DataStore Protocol Buffer
-    implementation "androidx.datastore:datastore-core:$dataStoreVersion"
-
-    // Protobuf
-    implementation "com.google.protobuf:protobuf-lite:$protobufVersion"
-
     // Elmslie
     implementation "com.github.vivid-money.elmslie:elmslie-core:$elmslieVersion"
     implementation "com.github.vivid-money.elmslie:elmslie-android:$elmslieVersion"
 
-}
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:$protobufVersion"
-    }
-
-    plugins {
-        javalite {
-            artifact = "com.google.protobuf:protoc-gen-javalite:$protobufVersion"
-        }
-    }
-
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                remove java
-            }
-            task.plugins {
-                javalite { }
-            }
-        }
-    }
+    // DataStore
+    implementation "androidx.datastore:datastore-core:$dataStoreVersion"
 }

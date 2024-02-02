@@ -26,14 +26,11 @@ buildscript {
         navigationVersion = "2.7.6"
         fastScrollVersion = "1.2.0"
         dataStoreVersion = "1.0.0"
-        protobufGradlePluginVersion = "0.9.3"
-        protobufVersion = "3.0.0"
         elmslieVersion = "3.0.0-alpha10"
     }
 
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
-        classpath "com.google.protobuf:protobuf-gradle-plugin:$protobufGradlePluginVersion"
     }
 }
 
