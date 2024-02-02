@@ -39,6 +39,7 @@ class GalleryRenderer(
     private val galleryPagingAdapter = GalleryAdapter()
     private val galleryFooterAdapter = LoadStateAdapter()
 
+    // Flag
     private val loadStateRenderer = LoadStateRenderer(
         root = binding.root,
         emptyView = binding.emptyGroup.root,
@@ -50,6 +51,7 @@ class GalleryRenderer(
         }
     )
 
+    // Flag
     private val galleryConcatAdapter by lazy {
         galleryPagingAdapter.withLoadStateFooter(
             footer = galleryFooterAdapter,
@@ -114,6 +116,7 @@ class GalleryRenderer(
         setupScrollingBehavior()
     }
 
+    // Flag // Flag
     private fun setupScrollingBehavior() = with(binding) {
         rvGallery.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -164,7 +167,7 @@ class GalleryRenderer(
         }
 
         searchViewContent.btnApply.setOnClickListener {
-            searchBar.text = searchView.text
+            searchBar.setText(searchView.text)
             galleryViewModel.onApplySearch()
             searchView.hide()
         }

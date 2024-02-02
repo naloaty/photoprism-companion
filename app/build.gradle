@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace 'me.naloaty.photoprism'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "me.naloaty.photoprism"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -40,6 +40,7 @@ android {
     }
     kapt {
         generateStubs true
+        correctErrorTypes true
     }
 }
 
@@ -99,8 +100,12 @@ dependencies {
     // DataStore Protocol Buffer
     implementation "androidx.datastore:datastore-core:$dataStoreVersion"
 
-    //Protobuf
+    // Protobuf
     implementation "com.google.protobuf:protobuf-lite:$protobufVersion"
+
+    // Elmslie
+    implementation "com.github.vivid-money.elmslie:elmslie-core:$elmslieVersion"
+    implementation "com.github.vivid-money.elmslie:elmslie-android:$elmslieVersion"
 
 }
 

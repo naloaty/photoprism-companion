@@ -115,7 +115,7 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
         }
 
         searchViewContent.btnApply.setOnClickListener {
-            searchBar.text = searchView.text
+            searchBar.setText(searchView.text)
             viewModel.onApplySearch()
             searchView.hide()
         }
