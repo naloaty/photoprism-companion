@@ -111,7 +111,7 @@ dependencies {
 tasks.withType(KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs += [
-            "-Xopt-in=com.yandex.yatagan.ConditionsApi"
+            "-opt-in=com.yandex.yatagan.ConditionsApi"
         ]
     }
 }

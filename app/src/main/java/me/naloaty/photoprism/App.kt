@@ -1,7 +1,6 @@
 package me.naloaty.photoprism
 
 import android.app.Application
-import androidx.viewbinding.BuildConfig
 import com.google.android.material.color.DynamicColors
 import com.yandex.yatagan.Yatagan
 import me.naloaty.photoprism.di.app.AppComponent
