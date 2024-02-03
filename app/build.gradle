@@ -104,9 +104,8 @@ dependencies {
 }
 
 tasks.withType(KotlinCompile).configureEach {
-    kotlinOptions {
-        freeCompilerArgs += [
-            "-opt-in=com.yandex.yatagan.ConditionsApi"
-        ]
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=com.yandex.yatagan.ConditionsApi")
+        freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
     }
 }
