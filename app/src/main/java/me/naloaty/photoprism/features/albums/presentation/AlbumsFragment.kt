@@ -6,7 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.search.SearchView
 import kotlinx.coroutines.flow.collectLatest
@@ -15,20 +14,22 @@ import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
 import me.naloaty.photoprism.base.flowFragmentViewModel
 import me.naloaty.photoprism.base.sessionViewModels
-import me.naloaty.photoprism.common.extension.withLoadStateFooter
-import me.naloaty.photoprism.common.recycler.LoadStateAdapter
+import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
+import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
 import me.naloaty.photoprism.databinding.FragmentAlbumsBinding
 import me.naloaty.photoprism.features.albums.presentation.recycler.AlbumsAdapter
+import me.naloaty.photoprism.features.common_ext.syncWithNavBottom
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import me.naloaty.photoprism.navigation.navigateSafely
 import timber.log.Timber
 
+private const val MIN_ALBUMS_PER_ROW = 2
 
 class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
 
     private val viewModel: AlbumsViewModel by sessionViewModels()
     private val viewBinding: FragmentAlbumsBinding by viewBinding()
-    private val flowViewModel: BottomNavViewModel by flowFragmentViewModel()
+    private val bottomNavViewModel: BottomNavViewModel by flowFragmentViewModel()
 
     private val albumsPagingAdapter = AlbumsAdapter()
     private val albumsFooterAdapter = LoadStateAdapter()
@@ -69,30 +70,7 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
             }
         }
 
-        setupScrollingBehavior()
-    }
-
-    private fun setupScrollingBehavior() = with(viewBinding) {
-        rvAlbums.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) { // Scrolling down
-                    flowViewModel.onScrollingDown()
-                } else { // Scrolling up
-                    flowViewModel.onScrollingUp()
-                }
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (
-                    RecyclerView.SCROLL_STATE_DRAGGING == newState ||
-                    RecyclerView.SCROLL_STATE_SETTLING == newState
-                ) {
-                    flowViewModel.onListStateChanged(true)
-                } else {
-                    flowViewModel.onListStateChanged(false)
-                }
-            }
-        })
+        rvAlbums.syncWithNavBottom(bottomNavViewModel)
     }
 
     private fun setupAlbumsSearch() = with(viewBinding) {
@@ -106,11 +84,11 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
                 SearchView.TransitionState.HIDDEN == newState
             ) {
                 viewModel.onSearchViewHidden()
-                flowViewModel.onSearchViewHidden()
+                bottomNavViewModel.onSearchViewHidden()
             }
 
             if (SearchView.TransitionState.SHOWING == newState) {
-                flowViewModel.onSearchViewShowing()
+                bottomNavViewModel.onSearchViewShowing()
             }
         }
 
@@ -151,9 +129,4 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
         })
         return albumsPerRow
     }
-
-    companion object {
-        const val MIN_ALBUMS_PER_ROW = 2
-    }
-
 }

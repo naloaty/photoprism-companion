@@ -8,7 +8,7 @@ import com.yandex.yatagan.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import me.naloaty.photoprism.AppDispatchers
-import me.naloaty.photoprism.common.extension.dataStoreFile
+import me.naloaty.photoprism.features.common_ext.dataStoreFile
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.di.app.qualifier.AppContext
 import me.naloaty.photoprism.features.auth.data.serializer.ActiveAccountSerializer

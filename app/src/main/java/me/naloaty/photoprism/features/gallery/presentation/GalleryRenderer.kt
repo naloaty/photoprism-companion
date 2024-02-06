@@ -7,16 +7,16 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.search.SearchView
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
-import me.naloaty.photoprism.common.extension.withLoadStateFooter
-import me.naloaty.photoprism.common.recycler.LoadStateAdapter
-import me.naloaty.photoprism.common.recycler.LoadStateRenderer
-import me.naloaty.photoprism.common.recycler.initCommonError
+import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer
+import me.naloaty.photoprism.features.common_recycler.initCommonError
 import me.naloaty.photoprism.databinding.FragmentGalleryBinding
+import me.naloaty.photoprism.features.common_ext.syncWithNavBottom
+import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
 import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import timber.log.Timber
@@ -113,31 +113,7 @@ class GalleryRenderer(
 //            .useMd2Style()
 //            .build()
 
-        setupScrollingBehavior()
-    }
-
-    // Flag // Flag
-    private fun setupScrollingBehavior() = with(binding) {
-        rvGallery.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) { // Scrolling down
-                    bottomNavViewModel.onScrollingDown()
-                } else { // Scrolling up
-                    bottomNavViewModel.onScrollingUp()
-                }
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (
-                    RecyclerView.SCROLL_STATE_DRAGGING == newState ||
-                    RecyclerView.SCROLL_STATE_SETTLING == newState
-                ) {
-                    bottomNavViewModel.onListStateChanged(true)
-                } else {
-                    bottomNavViewModel.onListStateChanged(false)
-                }
-            }
-        })
+        rvGallery.syncWithNavBottom(bottomNavViewModel)
     }
 
     private fun setupGallerySearch() = with(binding) {

@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.extension
+package me.naloaty.photoprism.features.common_ext
 
 import androidx.paging.LoadStateAdapter
 import androidx.paging.PagingDataAdapter

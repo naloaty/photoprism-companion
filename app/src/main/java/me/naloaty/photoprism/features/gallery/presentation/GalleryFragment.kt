@@ -8,7 +8,7 @@ import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
 import me.naloaty.photoprism.base.flowFragmentViewModel
 import me.naloaty.photoprism.base.sessionViewModels
-import me.naloaty.photoprism.common.extension.viewLifecycleProperty
+import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.databinding.FragmentGalleryBinding
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 

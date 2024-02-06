@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.recycler
+package me.naloaty.photoprism.features.common_recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

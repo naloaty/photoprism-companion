@@ -3,7 +3,7 @@ package me.naloaty.photoprism.features.auth.data
 import android.accounts.AccountManager
 import kotlinx.coroutines.withContext
 import me.naloaty.photoprism.AppDispatchers
-import me.naloaty.photoprism.common.extension.getAuthToken
+import me.naloaty.photoprism.features.common_ext.getAuthToken
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.features.auth.domain.exception.SessionObtainException
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount

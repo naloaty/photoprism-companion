@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.recycler
+package me.naloaty.photoprism.features.common_recycler
 
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -12,6 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import me.naloaty.photoprism.databinding.LayoutCommonErrorBinding
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.CACHE
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.CONTENT
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.EMPTY
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.ERROR
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.LOADING
 import timber.log.Timber
 
 private val TRANSITION_DURATION = 150L
@@ -25,7 +30,7 @@ class LoadStateRenderer(
     private val onFallbackToCache: () -> Unit
 ) {
 
-    private val state = MutableStateFlow(State.LOADING)
+    private val state = MutableStateFlow(LOADING)
 
 
     fun update(states: CombinedLoadStates, itemCount: Int) {
@@ -41,16 +46,16 @@ class LoadStateRenderer(
 
         if (itemCount > 0) {
             if (remoteError) {
-                state.tryEmit(State.CACHE)
+                state.tryEmit(CACHE)
             } else {
-                state.tryEmit(State.CONTENT)
+                state.tryEmit(CONTENT)
             }
         } else {
             when {
-                cacheIsUpdating -> state.tryEmit(State.LOADING)
-                cacheIsIdle && remoteAtTheEnd -> state.tryEmit(State.EMPTY)
-                cacheIsIdle && remoteError -> state.tryEmit(State.ERROR)
-                cacheIsIdle && remoteIsRefreshing -> state.tryEmit(State.LOADING)
+                cacheIsUpdating -> state.tryEmit(LOADING)
+                cacheIsIdle && remoteAtTheEnd -> state.tryEmit(EMPTY)
+                cacheIsIdle && remoteError -> state.tryEmit(ERROR)
+                cacheIsIdle && remoteIsRefreshing -> state.tryEmit(LOADING)
             }
         }
     }
@@ -67,11 +72,11 @@ class LoadStateRenderer(
     suspend fun render() {
         state.debounce(TRANSITION_DURATION).collectLatest { state ->
             when (state) {
-                State.LOADING -> renderLoadingState()
-                State.CONTENT -> renderContentState()
-                State.EMPTY -> renderEmptyState()
-                State.ERROR -> renderErrorState()
-                State.CACHE -> {
+                LOADING -> renderLoadingState()
+                CONTENT -> renderContentState()
+                EMPTY -> renderEmptyState()
+                ERROR -> renderErrorState()
+                CACHE -> {
                     onFallbackToCache()
                     renderContentState()
                 }

@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.recycler
+package me.naloaty.photoprism.features.common_recycler
 
 import android.graphics.Canvas
 import android.graphics.Rect

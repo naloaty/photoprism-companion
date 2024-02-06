@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.extension
+package me.naloaty.photoprism.features.common_ext
 
 import android.view.View
 import android.view.animation.Animation

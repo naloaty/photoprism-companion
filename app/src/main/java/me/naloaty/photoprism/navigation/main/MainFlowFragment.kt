@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.collectLatest
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.base.BaseFlowFragment
-import me.naloaty.photoprism.common.extension.setOnAnimationEndListener
-import me.naloaty.photoprism.common.extension.startAnimation
+import me.naloaty.photoprism.features.common_ext.setOnAnimationEndListener
+import me.naloaty.photoprism.features.common_ext.startAnimation
 import me.naloaty.photoprism.databinding.FlowFragmentMainBinding
 import me.naloaty.photoprism.navigation.main.model.ViewState
 

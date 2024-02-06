@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.extension
+package me.naloaty.photoprism.features.common_ext
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver

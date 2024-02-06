@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.common.recycler
+package me.naloaty.photoprism.features.common_recycler
 
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
