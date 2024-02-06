@@ -2,17 +2,19 @@ package me.naloaty.photoprism.features.albums.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.shareIn
 import me.naloaty.photoprism.features.albums.domain.model.AlbumSearchQuery
 import me.naloaty.photoprism.features.albums.domain.usecase.GetSearchResultUseCase
 import javax.inject.Inject
 
+private const val ALL_ALBUMS_QUERY = ""
 
 class AlbumsViewModel @Inject constructor(
     private val getSearchResultsUseCase: GetSearchResultUseCase
@@ -24,15 +26,16 @@ class AlbumsViewModel @Inject constructor(
         RESET
     }
 
-    companion object {
-        const val ALL_ALBUMS_QUERY = ""
-    }
+    private val searchQueryFlow = MutableStateFlow<AlbumSearchQuery?>(
+        AlbumSearchQuery(ALL_ALBUMS_QUERY)
+    )
 
-    private val searchQueryFlow = MutableStateFlow(AlbumSearchQuery(ALL_ALBUMS_QUERY))
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     val searchQueryResult = searchQueryFlow.flatMapLatest { query ->
-        getSearchResultsUseCase(query).cachedIn(viewModelScope)
+        if (query == null) {
+            flowOf(PagingData.empty())
+        } else {
+            getSearchResultsUseCase(query).cachedIn(viewModelScope)
+        }
     }.shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
 
 
@@ -47,21 +50,31 @@ class AlbumsViewModel @Inject constructor(
         when(pendingAction) {
             SearchAction.NONE -> return
             SearchAction.QUERY -> {
-                performSearchQuery(
+                val query = constructSearchQuery(
                     config = AlbumSearchQuery.Config(
                         refresh = true
                     )
                 )
+
+                performSearchQuery(query)
             }
             SearchAction.RESET -> {
-                updateSearchText(ALL_ALBUMS_QUERY)
-                performSearchQuery(
+                val currentQuery = searchQueryFlow.value
+
+                val query = constructSearchQuery(
                     config = AlbumSearchQuery.Config(
                         refresh = false
                     )
                 )
+
+                if (currentQuery?.value != query.value) {
+                    flushItems()
+                    updateSearchText(ALL_ALBUMS_QUERY)
+                    performSearchQuery(query)
+                }
             }
         }
+
         pendingAction = SearchAction.NONE
     }
 
@@ -86,11 +99,19 @@ class AlbumsViewModel @Inject constructor(
         _applySearchButtonEnabled.value = searchText.isNotBlank()
     }
 
-    private fun performSearchQuery(config: AlbumSearchQuery.Config) {
-        searchQueryFlow.value = AlbumSearchQuery(
+    private fun flushItems() {
+        searchQueryFlow.tryEmit(null)
+    }
+
+    private fun constructSearchQuery(config: AlbumSearchQuery.Config): AlbumSearchQuery {
+        return AlbumSearchQuery(
             value = searchText,
             config = config
         )
+    }
+
+    private fun performSearchQuery(query: AlbumSearchQuery) {
+        searchQueryFlow.value = query
     }
 
 }

@@ -16,17 +16,17 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.usecase.GetAlbumUseCase
-import me.naloaty.photoprism.features.gallery.domain.usecase.GetSearchResultCountUseCase
 import me.naloaty.photoprism.features.gallery.domain.usecase.GetSearchResultUseCase
 import me.naloaty.photoprism.features.gallery.presentation.mapper.toGalleryListItem
 import javax.inject.Inject
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
+private const val FULL_GALLERY_QUERY = ""
+private const val EMPTY_ALBUM_FILTER = ""
+
 class GalleryViewModel @Inject constructor(
     private val getSearchResultUseCase: GetSearchResultUseCase,
-    private val getAlbumUseCase: GetAlbumUseCase,
-    private val getSearchResultCountUseCase: GetSearchResultCountUseCase
+    private val getAlbumUseCase: GetAlbumUseCase
 ): ViewModel() {
 
     enum class SearchAction {
@@ -35,23 +35,18 @@ class GalleryViewModel @Inject constructor(
         RESET
     }
 
-    companion object {
-        const val FULL_GALLERY_QUERY = ""
-        const val EMPTY_ALBUM_FILTER = ""
-    }
-
-    private val searchQueryFlow = MutableStateFlow<GallerySearchQuery?>(GallerySearchQuery(FULL_GALLERY_QUERY))
+    private val searchQueryFlow = MutableStateFlow<GallerySearchQuery?>(
+        GallerySearchQuery(FULL_GALLERY_QUERY)
+    )
 
     val searchQueryResult = searchQueryFlow.flatMapLatest { query ->
         if (query == null) {
-            return@flatMapLatest flowOf(PagingData.empty())
+            flowOf(PagingData.empty())
+        } else {
+            getSearchResultUseCase(query).map { pagingData ->
+                pagingData.map { mediaItem -> mediaItem.toGalleryListItem() }
+            }.cachedIn(viewModelScope)
         }
-
-        getSearchResultUseCase(query).map { pagingData ->
-            pagingData.map { mediaItem ->
-                mediaItem.toGalleryListItem()
-            }
-        }.cachedIn(viewModelScope)
     }.shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
 
     private val _applySearchButtonEnabled = MutableStateFlow(false)
@@ -93,6 +88,7 @@ class GalleryViewModel @Inject constructor(
                 }
             }
         }
+
         pendingAction = SearchAction.NONE
     }
 
