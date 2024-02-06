@@ -54,16 +54,10 @@ class BottomNavViewModel: ViewModel()  {
     }
 
     private fun hideBottomNavigation(@AnimRes animResId: Int? = null) {
-        if (_bottomNavigationState.value is ViewState.Hidden)
-            return
-
         _bottomNavigationState.value = ViewState.Hidden(animResId)
     }
 
     private fun showBottomNavigation(@AnimRes animResId: Int? = null) {
-        if (_bottomNavigationState.value is ViewState.Shown)
-            return
-
         _bottomNavigationState.value = ViewState.Shown(animResId)
     }
 

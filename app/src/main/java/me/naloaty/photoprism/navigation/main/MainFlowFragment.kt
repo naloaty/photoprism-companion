@@ -1,10 +1,7 @@
 package me.naloaty.photoprism.navigation.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.annotation.AnimRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -17,9 +14,10 @@ import kotlinx.coroutines.flow.collectLatest
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.base.BaseFlowFragment
+import me.naloaty.photoprism.base.setSoftInputAdjustResize
+import me.naloaty.photoprism.databinding.FlowFragmentMainBinding
 import me.naloaty.photoprism.features.common_ext.setOnAnimationEndListener
 import me.naloaty.photoprism.features.common_ext.startAnimation
-import me.naloaty.photoprism.databinding.FlowFragmentMainBinding
 import me.naloaty.photoprism.navigation.main.model.ViewState
 
 class MainFlowFragment : BaseFlowFragment(
@@ -45,24 +43,14 @@ class MainFlowFragment : BaseFlowFragment(
         flowFragmentComponent.inject(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        setupSoftInputMode()
-        return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setSoftInputAdjustResize(view)
     }
 
     override fun onStart() {
         super.onStart()
         setupBottomNavigation()
-    }
-
-    private fun setupSoftInputMode() {
-        requireActivity().window.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-        )
     }
 
     override fun setupNavigation(navController: NavController) = with(viewBinding) {

@@ -1,40 +1,43 @@
 package me.naloaty.photoprism.features.albums.presentation
 
 import android.os.Bundle
-import androidx.core.widget.addTextChangedListener
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.search.SearchView
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
 import me.naloaty.photoprism.base.flowFragmentViewModel
 import me.naloaty.photoprism.base.sessionViewModels
-import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
-import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
 import me.naloaty.photoprism.databinding.FragmentAlbumsBinding
 import me.naloaty.photoprism.features.albums.presentation.recycler.AlbumsAdapter
-import me.naloaty.photoprism.features.common_ext.syncWithNavBottom
+import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
+import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
+import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
+import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer
+import me.naloaty.photoprism.features.common_recycler.initCommonError
+import me.naloaty.photoprism.features.common_search.initSearch
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import me.naloaty.photoprism.navigation.navigateSafely
 import timber.log.Timber
 
 private const val MIN_ALBUMS_PER_ROW = 2
+private const val ALBUM_CELL_SPAN = 1
 
 class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
 
     private val viewModel: AlbumsViewModel by sessionViewModels()
-    private val viewBinding: FragmentAlbumsBinding by viewBinding()
+    private val binding: FragmentAlbumsBinding by viewBinding()
     private val bottomNavViewModel: BottomNavViewModel by flowFragmentViewModel()
 
     private val albumsPagingAdapter = AlbumsAdapter()
     private val albumsFooterAdapter = LoadStateAdapter()
 
-    private val galleryConcatAdapter by lazy {
+    private val albumsConcatAdapter by lazy {
         albumsPagingAdapter.withLoadStateFooter(
             footer = albumsFooterAdapter,
             config = ConcatAdapter.Config.Builder()
@@ -43,6 +46,18 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
         )
     }
 
+    private val loadStateRenderer by lazy {
+        LoadStateRenderer(
+            root = binding.root,
+            emptyView = binding.emptyGroup.root,
+            loadingView = binding.loadingGroup.root,
+            errorView = binding.errorGroup.root,
+            contentView = binding.rvAlbums,
+            onFallbackToCache = {
+                Toast.makeText(context, "Albums from cache", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,69 +66,73 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
 
     override fun onStart() {
         super.onStart()
-        viewBinding.rvAlbums.post(::setupAlbumList)
+        binding.rvAlbums.post(::setupAlbumList)
         setupAlbumsSearch()
     }
 
-    private fun setupAlbumList() = with(viewBinding) {
-        rvAlbums.layoutManager = GridLayoutManager(context, calculateAlbumsPerRow())
-        rvAlbums.adapter = galleryConcatAdapter
+    private fun setupAlbumList() = with(binding) {
+        rvAlbums.layoutManager = createGridLayoutManager()
+        rvAlbums.adapter = albumsConcatAdapter
+
+        initCommonError(errorGroup, onRetry = albumsPagingAdapter::retry)
 
         albumsPagingAdapter.onItemClickListener = { album ->
             val directions = AlbumsFragmentDirections.actionViewAlbumContent(album.uid)
             findNavController().navigateSafely(directions)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchQueryResult.collectLatest {
-                albumsPagingAdapter.submitData(lifecycle, it)
+        viewLifecycleOwner.lifecycleScope.run {
+            launch {
+                viewModel.searchQueryResult.collectLatest {
+                    albumsPagingAdapter.submitData(lifecycle, it)
+                }
+            }
+
+            launch {
+                albumsPagingAdapter.loadStateFlow.collectLatest { state ->
+                    loadStateRenderer.update(state, albumsPagingAdapter.itemCount)
+                }
+            }
+
+            launch {
+                loadStateRenderer.render()
             }
         }
 
-        rvAlbums.syncWithNavBottom(bottomNavViewModel)
+        rvAlbums.syncWithBottomNav(bottomNavViewModel)
     }
 
-    private fun setupAlbumsSearch() = with(viewBinding) {
-        searchView.editText.addTextChangedListener {
-            viewModel.onSearchTextChanged(it.toString())
+    private fun setupAlbumsSearch() = with(binding) {
+        viewLifecycleOwner.lifecycleScope.run {
+            initSearch(
+                searchView = searchView,
+                searchBar = searchBar,
+                applyButton = searchViewContent.btnApply,
+                resetButton = searchViewContent.btnReset,
+                searchViewModel = viewModel,
+                bottomNavViewModel = bottomNavViewModel,
+                loadStateRenderer = loadStateRenderer
+            )
         }
+    }
 
-        searchView.addTransitionListener { _, previousState, newState ->
-            if (
-                SearchView.TransitionState.HIDING == previousState &&
-                SearchView.TransitionState.HIDDEN == newState
-            ) {
-                viewModel.onSearchViewHidden()
-                bottomNavViewModel.onSearchViewHidden()
-            }
+    private fun createGridLayoutManager(): GridLayoutManager {
+        val itemsPerRow = calculateAlbumsPerRow()
 
-            if (SearchView.TransitionState.SHOWING == newState) {
-                bottomNavViewModel.onSearchViewShowing()
-            }
-        }
-
-        searchViewContent.btnApply.setOnClickListener {
-            searchBar.setText(searchView.text)
-            viewModel.onApplySearch()
-            searchView.hide()
-        }
-
-        searchViewContent.btnReset.setOnClickListener {
-            searchBar.clearText()
-            searchView.clearText()
-            viewModel.onResetSearch()
-            searchView.hide()
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.applySearchButtonEnabled.collectLatest {
-                searchViewContent.btnApply.isEnabled = it
+        return GridLayoutManager(context, itemsPerRow).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int) =
+                    when (albumsConcatAdapter.getItemViewType(position)) {
+                        R.layout.li_album -> ALBUM_CELL_SPAN
+                        else -> itemsPerRow
+                    }
             }
         }
     }
+
 
     private fun calculateAlbumsPerRow(): Int {
-        val rowWidthPx = viewBinding.rvAlbums.measuredWidth
+        val rowWidthPx = binding.rvAlbums.measuredWidth
 
         val minAlbumWidthPx = resources.getDimensionPixelSize(
             R.dimen.li_album_min_size

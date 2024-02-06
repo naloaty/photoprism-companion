@@ -19,7 +19,7 @@ import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.ER
 import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer.State.LOADING
 import timber.log.Timber
 
-private val TRANSITION_DURATION = 150L
+private const val TRANSITION_DURATION = 150L
 
 class LoadStateRenderer(
     private val root: ViewGroup,
@@ -53,8 +53,8 @@ class LoadStateRenderer(
         } else {
             when {
                 cacheIsUpdating -> state.tryEmit(LOADING)
-                cacheIsIdle && remoteAtTheEnd -> state.tryEmit(EMPTY)
                 cacheIsIdle && remoteError -> state.tryEmit(ERROR)
+                cacheIsIdle && remoteAtTheEnd -> state.tryEmit(EMPTY)
                 cacheIsIdle && remoteIsRefreshing -> state.tryEmit(LOADING)
             }
         }

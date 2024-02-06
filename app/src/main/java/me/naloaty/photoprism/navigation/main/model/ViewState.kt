@@ -2,10 +2,10 @@ package me.naloaty.photoprism.navigation.main.model
 
 import androidx.annotation.AnimRes
 
-sealed class ViewState(
-    @AnimRes val animResId: Int?
-) {
+sealed interface ViewState {
 
-    class Shown(@AnimRes animResId: Int?): ViewState(animResId)
-    class Hidden(@AnimRes animResId: Int?): ViewState(animResId)
+    val animResId: Int?
+
+    data class Shown(@AnimRes override val animResId: Int?): ViewState
+    data class Hidden(@AnimRes override val animResId: Int?): ViewState
 }

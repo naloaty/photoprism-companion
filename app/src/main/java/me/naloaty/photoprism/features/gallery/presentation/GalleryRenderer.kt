@@ -2,24 +2,26 @@ package me.naloaty.photoprism.features.gallery.presentation
 
 import android.content.Context
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.search.SearchView
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
+import me.naloaty.photoprism.databinding.FragmentGalleryBinding
+import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
+import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
 import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
 import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer
 import me.naloaty.photoprism.features.common_recycler.initCommonError
-import me.naloaty.photoprism.databinding.FragmentGalleryBinding
-import me.naloaty.photoprism.features.common_ext.syncWithNavBottom
-import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
+import me.naloaty.photoprism.features.common_search.initSearch
 import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import timber.log.Timber
+
+private const val MIN_MEDIA_ITEMS_PER_ROW = 1
+private const val GALLERY_CELL_SPAN = 1
 
 class GalleryRenderer(
     private val context: Context,
@@ -28,12 +30,6 @@ class GalleryRenderer(
     private val galleryViewModel: GalleryViewModel,
     private val bottomNavViewModel: BottomNavViewModel
 ) {
-
-    companion object {
-        const val MIN_MEDIA_ITEMS_PER_ROW = 1
-        const val GALLERY_CELL_SPAN = 1
-    }
-
     private val resources = context.resources
 
     private val galleryPagingAdapter = GalleryAdapter()
@@ -47,7 +43,7 @@ class GalleryRenderer(
         errorView = binding.errorGroup.root,
         contentView = binding.rvGallery,
         onFallbackToCache = {
-            Toast.makeText(context, "Results from cache", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Gallery from cache", Toast.LENGTH_SHORT).show()
         }
     )
 
@@ -78,7 +74,7 @@ class GalleryRenderer(
 
         initCommonError(errorGroup, onRetry = galleryPagingAdapter::retry)
 
-        with(viewLifecycleOwner.lifecycleScope) {
+        viewLifecycleOwner.lifecycleScope.run {
             launch {
                 galleryViewModel.searchQueryResult.collectLatest {
                     galleryPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
@@ -113,64 +109,32 @@ class GalleryRenderer(
 //            .useMd2Style()
 //            .build()
 
-        rvGallery.syncWithNavBottom(bottomNavViewModel)
+        rvGallery.syncWithBottomNav(bottomNavViewModel)
     }
 
     private fun setupGallerySearch() = with(binding) {
-        searchView.editText.addTextChangedListener {
-            galleryViewModel.onSearchTextChanged(it.toString())
-        }
+        viewLifecycleOwner.lifecycleScope.run {
+            initSearch(
+                searchView = searchView,
+                searchBar = searchBar,
+                applyButton = searchViewContent.btnApply,
+                resetButton = searchViewContent.btnReset,
+                searchViewModel = galleryViewModel,
+                bottomNavViewModel = bottomNavViewModel,
+                loadStateRenderer = loadStateRenderer
+            )
 
-        searchView.addTransitionListener { _, previousState, newState ->
-            if (
-                SearchView.TransitionState.HIDING == previousState &&
-                SearchView.TransitionState.HIDDEN == newState
-            ) {
-                galleryViewModel.onSearchViewHidden()
-                bottomNavViewModel.onSearchViewHidden()
-            }
+            launch {
+                galleryViewModel.albumTitle.collectLatest { title ->
+                    val hint = if (title == null) {
+                        resources.getString(R.string.hint_media_library_search)
+                    } else {
+                        resources.getString(R.string.hint_album_content_search, title.lowercase())
+                    }
 
-            if (SearchView.TransitionState.SHOWING == newState) {
-                bottomNavViewModel.onSearchViewShowing()
-            }
-
-            if (
-                SearchView.TransitionState.SHOWING == previousState &&
-                SearchView.TransitionState.SHOWN == newState
-            ) {
-                loadStateRenderer.reset()
-            }
-        }
-
-        searchViewContent.btnApply.setOnClickListener {
-            searchBar.setText(searchView.text)
-            galleryViewModel.onApplySearch()
-            searchView.hide()
-        }
-
-        searchViewContent.btnReset.setOnClickListener {
-            searchBar.clearText()
-            searchView.clearText()
-            galleryViewModel.onResetSearch()
-            searchView.hide()
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            galleryViewModel.albumTitle.collectLatest { title ->
-                val hint = if (title == null) {
-                    resources.getString(R.string.hint_media_library_search)
-                } else {
-                    resources.getString(R.string.hint_album_content_search, title.lowercase())
+                    searchBar.hint = hint
+                    searchView.hint = hint
                 }
-
-                searchBar.hint = hint
-                searchView.hint = hint
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            galleryViewModel.applySearchButtonEnabled.collectLatest {
-                searchViewContent.btnApply.isEnabled = it
             }
         }
     }
