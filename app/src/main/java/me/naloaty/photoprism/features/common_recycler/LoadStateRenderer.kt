@@ -46,16 +46,16 @@ class LoadStateRenderer(
 
         if (itemCount > 0) {
             if (remoteError) {
-                state.tryEmit(CACHE)
+                state.value = CACHE
             } else {
-                state.tryEmit(CONTENT)
+                state.value = CONTENT
             }
         } else {
             when {
-                cacheIsUpdating -> state.tryEmit(LOADING)
-                cacheIsIdle && remoteError -> state.tryEmit(ERROR)
-                cacheIsIdle && remoteAtTheEnd -> state.tryEmit(EMPTY)
-                cacheIsIdle && remoteIsRefreshing -> state.tryEmit(LOADING)
+                cacheIsUpdating -> state.value = LOADING
+                cacheIsIdle && remoteError -> state.value = ERROR
+                cacheIsIdle && remoteAtTheEnd -> state.value = EMPTY
+                cacheIsIdle && remoteIsRefreshing -> state.value = LOADING
             }
         }
     }

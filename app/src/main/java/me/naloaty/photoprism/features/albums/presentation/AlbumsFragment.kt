@@ -1,6 +1,7 @@
 package me.naloaty.photoprism.features.albums.presentation
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import me.naloaty.photoprism.base.sessionViewModels
 import me.naloaty.photoprism.databinding.FragmentAlbumsBinding
 import me.naloaty.photoprism.features.albums.presentation.recycler.AlbumsAdapter
 import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
+import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.features.common_ext.withLoadStateFooter
 import me.naloaty.photoprism.features.common_recycler.LoadStateAdapter
 import me.naloaty.photoprism.features.common_recycler.LoadStateRenderer
@@ -46,8 +48,17 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
         )
     }
 
-    private val loadStateRenderer by lazy {
-        LoadStateRenderer(
+    private var loadStateRenderer by viewLifecycleProperty<LoadStateRenderer>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fragmentWithSessionComponent.inject(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        loadStateRenderer = LoadStateRenderer(
             root = binding.root,
             emptyView = binding.emptyGroup.root,
             loadingView = binding.loadingGroup.root,
@@ -57,15 +68,7 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
                 Toast.makeText(context, "Albums from cache", Toast.LENGTH_SHORT).show()
             }
         )
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        fragmentWithSessionComponent.inject(this)
-    }
-
-    override fun onStart() {
-        super.onStart()
         binding.rvAlbums.post(::setupAlbumList)
         setupAlbumsSearch()
     }
