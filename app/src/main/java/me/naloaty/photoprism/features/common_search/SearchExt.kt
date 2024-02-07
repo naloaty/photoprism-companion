@@ -1,6 +1,7 @@
 package me.naloaty.photoprism.features.common_search
 
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
@@ -21,6 +22,17 @@ fun <Query : SearchQuery, Result : Any> CoroutineScope.initSearch(
 ) {
     searchView.editText.addTextChangedListener {
         searchViewModel.onSearchTextChanged(it.toString())
+    }
+    
+    searchView.editText.setOnEditorActionListener { _, actionId, _ ->
+        if (EditorInfo.IME_ACTION_SEARCH == actionId) {
+            searchBar.setText(searchView.text)
+            searchViewModel.onApplySearch()
+            searchView.hide()
+            true
+        } else {
+            false
+        }
     }
 
     searchView.addTransitionListener { _, previousState, newState ->

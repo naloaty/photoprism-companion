@@ -59,9 +59,16 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
 
     protected fun performQueryAction() {
         val query = constructSearchQuery(
-            searchText = searchText,
+            searchText = searchText.trim(),
             config = SearchQuery.Config(refresh = true)
         )
+
+        val currentQuery = searchQueryFlow.value
+
+        if (currentQuery?.value != query.value) {
+            updateSearchText(defaultSearchQuery.value)
+            performSearchQuery(query)
+        }
 
         performSearchQuery(query)
     }

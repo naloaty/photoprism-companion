@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseFlowFragment
-import me.naloaty.photoprism.base.setSoftInputAdjustNothing
+import me.naloaty.photoprism.base.setSoftInputAdjustPan
 
 class AuthFlowFragment : BaseFlowFragment(
     R.layout.flow_fragment_auth, R.id.nav_host_fragment_auth
@@ -12,6 +12,6 @@ class AuthFlowFragment : BaseFlowFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSoftInputAdjustNothing(view)
+        setSoftInputAdjustPan(view)
     }
 }

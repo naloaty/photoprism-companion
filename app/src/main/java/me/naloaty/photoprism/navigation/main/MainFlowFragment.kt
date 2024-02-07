@@ -5,12 +5,15 @@ import android.view.View
 import androidx.annotation.AnimRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.base.BaseFlowFragment
@@ -19,6 +22,7 @@ import me.naloaty.photoprism.databinding.FlowFragmentMainBinding
 import me.naloaty.photoprism.features.common_ext.setOnAnimationEndListener
 import me.naloaty.photoprism.features.common_ext.startAnimation
 import me.naloaty.photoprism.navigation.main.model.ViewState
+import timber.log.Timber
 
 class MainFlowFragment : BaseFlowFragment(
     R.layout.flow_fragment_main, R.id.nav_host_fragment_main
@@ -46,10 +50,6 @@ class MainFlowFragment : BaseFlowFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSoftInputAdjustResize(view)
-    }
-
-    override fun onStart() {
-        super.onStart()
         setupBottomNavigation()
     }
 
@@ -65,11 +65,13 @@ class MainFlowFragment : BaseFlowFragment(
     }
 
     private fun setupBottomNavigation() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            bottomNavViewModel.bottomNavigationState.collectLatest { state ->
-                when (state) {
-                    is ViewState.Shown -> showBottomNavigation(state.animResId)
-                    is ViewState.Hidden -> hideBottomNavigation(state.animResId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                bottomNavViewModel.bottomNavigationState.collectLatest { state ->
+                    when (state) {
+                        is ViewState.Shown -> showBottomNavigation(state.animResId)
+                        is ViewState.Hidden -> hideBottomNavigation(state.animResId)
+                    }
                 }
             }
         }
@@ -92,6 +94,7 @@ class MainFlowFragment : BaseFlowFragment(
     }
 
     private fun showBottomNavigation(@AnimRes animResId: Int?) = with(viewBinding) {
+        Timber.d("Show bottom 2")
         if (bottomNavigation.isVisible)
             return
 

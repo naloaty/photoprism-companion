@@ -13,6 +13,7 @@ class BottomNavViewModel: ViewModel()  {
 
     private var onAlbumsContent = false
     private var listScrolledByUser = false
+    private var searchViewIsVisible = false
 
 
     fun onAlbumsNavigated() {
@@ -26,12 +27,16 @@ class BottomNavViewModel: ViewModel()  {
     }
 
     fun onSearchViewShowing() {
+        searchViewIsVisible = true
+
         if (!onAlbumsContent) {
             hideBottomNavigation(R.anim.slide_out_bottom)
         }
     }
 
     fun onSearchViewHidden() {
+        searchViewIsVisible = false
+
         if (!onAlbumsContent) {
             showBottomNavigation(R.anim.slide_in_bottom)
         }
@@ -42,22 +47,26 @@ class BottomNavViewModel: ViewModel()  {
     }
 
     fun onScrollingUp() {
-        if (!onAlbumsContent && listScrolledByUser) {
-            showBottomNavigation(R.anim.slide_in_bottom)
-        }
+        if (onAlbumsContent) return
+        if (!listScrolledByUser) return
+        if (searchViewIsVisible) return
+        showBottomNavigation(R.anim.slide_in_bottom)
     }
 
     fun onScrollingDown() {
-        if (!onAlbumsContent && listScrolledByUser) {
-            hideBottomNavigation(R.anim.slide_out_bottom)
-        }
+        if (onAlbumsContent) return
+        if (!listScrolledByUser) return
+        if (searchViewIsVisible) return
+        hideBottomNavigation(R.anim.slide_out_bottom)
     }
 
     private fun hideBottomNavigation(@AnimRes animResId: Int? = null) {
+        if (_bottomNavigationState.value is ViewState.Hidden) return
         _bottomNavigationState.value = ViewState.Hidden(animResId)
     }
 
     private fun showBottomNavigation(@AnimRes animResId: Int? = null) {
+        if (_bottomNavigationState.value is ViewState.Shown) return
         _bottomNavigationState.value = ViewState.Shown(animResId)
     }
 

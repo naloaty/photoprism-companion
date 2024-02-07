@@ -8,13 +8,11 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
-import androidx.core.view.WindowInsetsAnimationCompat.BoundsCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsCompat.Type
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
-import kotlin.math.roundToInt
 
 
 inline fun <reified VM : ViewModel> BaseFragment.flowFragmentViewModels() = viewModels<VM> {
@@ -45,70 +43,132 @@ fun Fragment.setupWindowInsets() {
 }
 
 fun Fragment.setSoftInputAdjustResize(root: View) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        requireActivity().window.setDecorFitsSystemWindows(false)
-        root.setOnApplyWindowInsetsListener { _, insets ->
-            val imeHeight = insets.getInsets(WindowInsets.Type.ime()).bottom
-            val statusHeight = insets.getInsets(WindowInsets.Type.systemBars()).top
-            val navHeight = insets.getInsets(WindowInsets.Type.systemBars()).bottom
-            val bottomHeight = if (imeHeight == 0) navHeight else 0
+    /* data */ class InsetsHolder(
+        var imeHeight: Int = 0,
+        var navBarHeight: Int = 0,
+    )
 
-            root.setPadding(0, statusHeight, 0, bottomHeight)
-            WindowInsets.CONSUMED
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        requireActivity().window.setDecorFitsSystemWindows(false);
+    } else {
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+
+    val insetsHolder = InsetsHolder()
+
+    ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+        val imeHeight = insets.getInsets(Type.ime()).bottom
+        val statusHeight = insets.getInsets(Type.statusBars()).top
+        val navBarHeight = insets.getInsets(Type.navigationBars()).bottom
+
+        val softKeyboardIsVisible = insets.isVisible(Type.ime())
+        val bottomHeightIsSet = root.paddingBottom == imeHeight
+
+        /**
+         * Sometimes reported ime height is wrong (much smaller),
+         * so we need a little "hack" to detect & fix that.
+         *
+         * Note: keyboard window is also glitches when it happens
+         * (because wrong end animation height, i guess), so it must be not my fault.
+         */
+        val bottomHeightIsOff = root.paddingBottom < imeHeight
+                && imeHeight > 0 && root.paddingBottom > navBarHeight
+
+        /**
+         * Keyboard is changed (e.g. samsung -> gboard)
+         */
+        val bottomHeightIsOff2 = insetsHolder.imeHeight > navBarHeight &&
+                insetsHolder.imeHeight != imeHeight
+
+        val bottomHeight = when {
+            softKeyboardIsVisible && bottomHeightIsSet -> {
+                imeHeight
+            }
+            softKeyboardIsVisible && (bottomHeightIsOff || bottomHeightIsOff2) -> {
+                imeHeight
+            }
+            else -> navBarHeight
         }
 
-        ViewCompat.setWindowInsetsAnimationCallback(
-            root,
-            object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
-                var endBottomPadding = 0
-                var initialBottomPadding = 0
+        insetsHolder.apply {
+            this.imeHeight = imeHeight
+            this.navBarHeight = navBarHeight
+        }
 
-                override fun onStart(
-                    animation: WindowInsetsAnimationCompat,
-                    bounds: BoundsCompat
-                ): BoundsCompat {
-                    endBottomPadding = bounds.upperBound.bottom
-                    initialBottomPadding = root.paddingBottom
-                    return bounds
-                }
+//        Timber.d(buildString {
+//            appendLine("Context: Apply Insets")
+//            appendLine(insetsHolder)
+//            appendLine("paddingBottom = ${root.paddingBottom}")
+//            appendLine("softKeyboardIsVisible = $softKeyboardIsVisible")
+//            appendLine("bottomHeightIsSet = $bottomHeightIsSet")
+//            appendLine("bottomHeightIsOff = $bottomHeightIsOff")
+//            appendLine("bottomHeight = $bottomHeight")
+//            appendLine("============")
+//        })
 
-                override fun onProgress(
-                    insets: WindowInsetsCompat,
-                    runningAnimations: MutableList<WindowInsetsAnimationCompat>
-                ): WindowInsetsCompat {
-                    // Find an IME animation.
-                    val imeAnimation = runningAnimations.find {
-                        it.typeMask and Type.ime() != 0
-                    } ?: return insets
-
-                    if (initialBottomPadding != 0) return insets
-                    val currPadding = endBottomPadding * imeAnimation.interpolatedFraction
-
-                    with(root) {
-                        setPadding(paddingLeft, paddingTop, paddingRight, currPadding.roundToInt())
-                    }
-                    return insets
-                }
-            }
-        )
-    } else {
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        root.setPadding(root.paddingLeft, statusHeight, root.paddingRight, bottomHeight)
+        WindowInsetsCompat.CONSUMED
     }
+
+    ViewCompat.setWindowInsetsAnimationCallback(
+        root,
+        object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
+            override fun onProgress(
+                insets: WindowInsetsCompat,
+                runningAnimations: MutableList<WindowInsetsAnimationCompat>
+            ): WindowInsetsCompat {
+                if (insetsHolder.imeHeight == 0) return insets
+                val currentImeHeight = insets.getInsets(Type.ime()).bottom
+
+//                Timber.d(buildString {
+//                    appendLine("Context: Animation")
+//                    appendLine(insetsHolder)
+//                    appendLine("currentImeHeight = $currentImeHeight")
+//                    appendLine("============")
+//                })
+
+                with(root) {
+                    setPadding(paddingLeft, paddingTop, paddingRight, currentImeHeight)
+                }
+
+                return insets
+            }
+        }
+    )
 }
 
-fun Fragment.setSoftInputAdjustPan() {
+fun Fragment.setSoftInputAdjustPan(root: View) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         requireActivity().window.setDecorFitsSystemWindows(true)
+    } else {
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_ATTACHED_IN_DECOR,
+            WindowManager.LayoutParams.FLAG_LAYOUT_ATTACHED_IN_DECOR
+        )
     }
-    requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+    ViewCompat.setWindowInsetsAnimationCallback(root, null)
+    ViewCompat.setOnApplyWindowInsetsListener(root, null)
+
+    requireActivity().window.setSoftInputMode(
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+    )
 }
 
 fun Fragment.setSoftInputAdjustNothing(root: View) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         requireActivity().window.setDecorFitsSystemWindows(true)
-        ViewCompat.setWindowInsetsAnimationCallback(root, null)
     }
-    requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+
+    ViewCompat.setWindowInsetsAnimationCallback(root, null)
+    ViewCompat.setOnApplyWindowInsetsListener(root, null)
+
+    requireActivity().window.setSoftInputMode(
+        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+    )
 }
 
 
