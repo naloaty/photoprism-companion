@@ -6,7 +6,7 @@
         android:title="@string/menu_item_photos" />
 
     <item
-        android:id="@+id/albums_flow"
+        android:id="@+id/albums_fragment"
         android:icon="@drawable/albums_selector"
         android:title="@string/menu_item_albums" />
 </menu>
