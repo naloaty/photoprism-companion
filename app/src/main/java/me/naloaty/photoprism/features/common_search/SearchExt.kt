@@ -26,9 +26,7 @@ fun <Query : SearchQuery, Result : Any> CoroutineScope.initSearch(
     
     searchView.editText.setOnEditorActionListener { _, actionId, _ ->
         if (EditorInfo.IME_ACTION_SEARCH == actionId) {
-            searchBar.setText(searchView.text)
             searchViewModel.onApplySearch()
-            searchView.hide()
             true
         } else {
             false
@@ -56,22 +54,28 @@ fun <Query : SearchQuery, Result : Any> CoroutineScope.initSearch(
         }
     }
 
-    applyButton.setOnClickListener {
-        searchBar.setText(searchView.text)
-        searchViewModel.onApplySearch()
-        searchView.hide()
-    }
+    applyButton.setOnClickListener { searchViewModel.onApplySearch() }
+    resetButton.setOnClickListener { searchViewModel.onResetSearch() }
 
-    resetButton.setOnClickListener {
-        searchBar.clearText()
-        searchView.clearText()
-        searchViewModel.onResetSearch()
-        searchView.hide()
+    launch {
+        searchViewModel.searchState.collectLatest { state ->
+            applyButton.isEnabled = state.applyButtonEnabled
+        }
     }
 
     launch {
-        searchViewModel.applySearchButtonEnabled.collectLatest {
-            applyButton.isEnabled = it
+        searchViewModel.searchEffect.collectLatest { event ->
+            when (event) {
+                is SearchEffect.HideSearchView -> {
+                    event.getContentIfNotHandled()?.let { searchView.hide() }
+                }
+
+                is SearchEffect.UpdateSearchText -> {
+                    searchBar.setText(event.value)
+                    searchView.setText(event.value)
+                    searchView.editText.setSelection(event.value.length)
+                }
+            }
         }
     }
 }

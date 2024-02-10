@@ -5,14 +5,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import me.naloaty.photoprism.AppDispatchers
-import me.naloaty.photoprism.features.common_ext.dataStoreFile
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.di.app.qualifier.AppContext
 import me.naloaty.photoprism.features.auth.data.serializer.ActiveAccountSerializer
 import me.naloaty.photoprism.features.auth.domain.model.ActiveAccount
+import me.naloaty.photoprism.features.common_ext.dataStoreFile
 
 
 private const val ACTIVE_ACCOUNT = "active_account.json"
@@ -24,11 +21,9 @@ interface DataStoreModule {
 
         @[AppScope Provides]
         fun provideActiveAccountDataStore(
-            @AppContext context: Context,
-            dispatchers: AppDispatchers
+            @AppContext context: Context
         ): DataStore<ActiveAccount?> {
             return DataStoreFactory.create(
-                scope = CoroutineScope(dispatchers.io + SupervisorJob()),
                 produceFile = { context.dataStoreFile(ACTIVE_ACCOUNT) },
                 serializer = ActiveAccountSerializer
             )

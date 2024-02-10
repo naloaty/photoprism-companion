@@ -18,7 +18,7 @@ interface DatabaseModule {
             return Room.databaseBuilder(
                 appContext,
                 AppDatabase::class.java,
-                AppDatabase.DB_NAME
+                appContext.cacheDir.path + "/" + AppDatabase.DB_NAME
             ).build()
         }
     }

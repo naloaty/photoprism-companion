@@ -5,8 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import me.naloaty.photoprism.common.PreviewUrlFactory
 import me.naloaty.photoprism.db.AppDatabase
 import me.naloaty.photoprism.di.session.SessionScope
@@ -30,7 +32,9 @@ class AlbumRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getSearchResultStream(query: AlbumSearchQuery): Flow<PagingData<Album>> {
-        val searchQuery = searchQueryDao.findOrInsert(query)
+        val searchQuery = withContext(Dispatchers.IO) {
+            searchQueryDao.findOrInsert(query)
+        }
 
         val resultFlow = Pager(
             config = PagingConfig(
@@ -56,9 +60,11 @@ class AlbumRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAlbumByUid(albumUid: String): Album {
-        return albumDao.getAlbumByUid(albumUid).toAlbum(
-            previewUrlFactory = previewUrlFactory
-        )
+        return withContext(Dispatchers.IO) {
+            albumDao.getAlbumByUid(albumUid).toAlbum(
+                previewUrlFactory = previewUrlFactory
+            )
+        }
     }
 
     companion object {

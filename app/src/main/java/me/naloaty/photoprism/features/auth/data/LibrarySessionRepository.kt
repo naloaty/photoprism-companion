@@ -1,26 +1,24 @@
 package me.naloaty.photoprism.features.auth.data
 
 import android.accounts.AccountManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.naloaty.photoprism.AppDispatchers
-import me.naloaty.photoprism.features.common_ext.getAuthToken
 import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.features.auth.domain.exception.SessionObtainException
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession
+import me.naloaty.photoprism.features.common_ext.getAuthToken
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @AppScope
 class LibrarySessionRepository @Inject constructor(
-    private val dispatchers: AppDispatchers,
     private val accountManager: AccountManager
 ){
 
     suspend fun getSession(libraryAccount: LibraryAccount): LibraryAccountSession {
         val account = libraryAccount.toAndroidAccount()
 
-        return withContext(coroutineContext + dispatchers.io) {
+        return withContext(Dispatchers.IO) {
             val sessionId = accountManager.getAuthToken(
                 account, LibraryAccountSession.TOKEN_TYPE_SESSION
             ) ?: throw SessionObtainException()

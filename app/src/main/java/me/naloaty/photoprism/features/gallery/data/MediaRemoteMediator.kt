@@ -8,6 +8,8 @@ import androidx.room.withTransaction
 import com.yandex.yatagan.Assisted
 import com.yandex.yatagan.AssistedFactory
 import com.yandex.yatagan.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.naloaty.photoprism.api.endpoint.media.extension.fileCount
 import me.naloaty.photoprism.api.endpoint.media.service.PhotoPrismMediaService
 import me.naloaty.photoprism.db.AppDatabase
@@ -41,7 +43,7 @@ class MediaRemoteMediator @AssistedInject constructor(
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, GallerySearchResultDbCompound>
-    ): MediatorResult {
+    ): MediatorResult = withContext(Dispatchers.IO) {
         try {
             val queryId = searchQueryDao.findOrInsert(query).id
 
@@ -65,8 +67,9 @@ class MediaRemoteMediator @AssistedInject constructor(
                 appendLine("page=$page")
             })
 
-            if (page == null)
-                return MediatorResult.Success(endOfPaginationReached = true)
+            if (page == null) {
+                return@withContext MediatorResult.Success(endOfPaginationReached = true)
+            }
 
             val pageSize = state.config.pageSize
             val offset = page * pageSize
@@ -112,13 +115,13 @@ class MediaRemoteMediator @AssistedInject constructor(
             }
 
             Timber.d("Search result updated")
-            return MediatorResult.Success(endOfPaginationReached = lastPage)
+            MediatorResult.Success(endOfPaginationReached = lastPage)
         } catch (exception: IOException) {
             Timber.d(exception)
-            return MediatorResult.Error(exception)
+            MediatorResult.Error(exception)
         } catch (exception: HttpException) {
             Timber.d(exception, )
-            return MediatorResult.Error(exception)
+            MediatorResult.Error(exception)
         }
     }
 

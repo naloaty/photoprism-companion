@@ -3,7 +3,9 @@ package me.naloaty.photoprism.features.albums.presentation
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
@@ -92,13 +94,17 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
             }
 
             launch {
-                albumsPagingAdapter.loadStateFlow.collectLatest { state ->
-                    loadStateRenderer.update(state, albumsPagingAdapter.itemCount)
-                }
-            }
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    launch {
+                        albumsPagingAdapter.loadStateFlow.collectLatest { state ->
+                            loadStateRenderer.update(state, albumsPagingAdapter.itemCount)
+                        }
+                    }
 
-            launch {
-                loadStateRenderer.render()
+                    launch {
+                        loadStateRenderer.render()
+                    }
+                }
             }
         }
 
@@ -106,16 +112,18 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
     }
 
     private fun setupAlbumsSearch() = with(binding) {
-        viewLifecycleOwner.lifecycleScope.run {
-            initSearch(
-                searchView = searchView,
-                searchBar = searchBar,
-                applyButton = searchViewContent.btnApply,
-                resetButton = searchViewContent.btnReset,
-                searchViewModel = viewModel,
-                bottomNavViewModel = bottomNavViewModel,
-                loadStateRenderer = loadStateRenderer
-            )
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                initSearch(
+                    searchView = searchView,
+                    searchBar = searchBar,
+                    applyButton = searchViewContent.btnApply,
+                    resetButton = searchViewContent.btnReset,
+                    searchViewModel = viewModel,
+                    bottomNavViewModel = bottomNavViewModel,
+                    loadStateRenderer = loadStateRenderer
+                )
+            }
         }
     }
 

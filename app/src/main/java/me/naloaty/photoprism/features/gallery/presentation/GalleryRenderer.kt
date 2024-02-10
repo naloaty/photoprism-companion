@@ -2,8 +2,10 @@ package me.naloaty.photoprism.features.gallery.presentation
 
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.flow.collectLatest
@@ -82,13 +84,17 @@ class GalleryRenderer(
             }
 
             launch {
-                galleryPagingAdapter.loadStateFlow.collectLatest { state ->
-                    loadStateRenderer.update(state, galleryPagingAdapter.itemCount)
-                }
-            }
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    launch {
+                        galleryPagingAdapter.loadStateFlow.collectLatest { state ->
+                            loadStateRenderer.update(state, galleryPagingAdapter.itemCount)
+                        }
+                    }
 
-            launch {
-                loadStateRenderer.render()
+                    launch {
+                        loadStateRenderer.render()
+                    }
+                }
             }
         }
 
@@ -113,27 +119,29 @@ class GalleryRenderer(
     }
 
     private fun setupGallerySearch() = with(binding) {
-        viewLifecycleOwner.lifecycleScope.run {
-            initSearch(
-                searchView = searchView,
-                searchBar = searchBar,
-                applyButton = searchViewContent.btnApply,
-                resetButton = searchViewContent.btnReset,
-                searchViewModel = galleryViewModel,
-                bottomNavViewModel = bottomNavViewModel,
-                loadStateRenderer = loadStateRenderer
-            )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                initSearch(
+                    searchView = searchView,
+                    searchBar = searchBar,
+                    applyButton = searchViewContent.btnApply,
+                    resetButton = searchViewContent.btnReset,
+                    searchViewModel = galleryViewModel,
+                    bottomNavViewModel = bottomNavViewModel,
+                    loadStateRenderer = loadStateRenderer
+                )
 
-            launch {
-                galleryViewModel.albumTitle.collectLatest { title ->
-                    val hint = if (title == null) {
-                        resources.getString(R.string.hint_media_library_search)
-                    } else {
-                        resources.getString(R.string.hint_album_content_search, title.lowercase())
+                launch {
+                    galleryViewModel.albumTitle.collectLatest { title ->
+                        val hint = if (title == null) {
+                            resources.getString(R.string.hint_media_library_search)
+                        } else {
+                            resources.getString(R.string.hint_album_content_search, title.lowercase())
+                        }
+
+                        searchBar.hint = hint
+                        searchView.hint = hint
                     }
-
-                    searchBar.hint = hint
-                    searchView.hint = hint
                 }
             }
         }

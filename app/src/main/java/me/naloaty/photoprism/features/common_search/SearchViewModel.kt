@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -28,11 +30,14 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
         }.shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
 
 
-    private val _applySearchButtonEnabled = MutableStateFlow(false)
-    val applySearchButtonEnabled = _applySearchButtonEnabled.asStateFlow()
+    private val _searchState = MutableStateFlow(SearchState())
+    val searchState = _searchState.asStateFlow()
+
+    private val _searchEffect = MutableSharedFlow<SearchEffect>(replay = 1)
+    val searchEffect = _searchEffect.asSharedFlow()
 
     private var pendingAction = SearchAction.NONE
-    private var searchText = defaultSearchQuery.value
+    private var searchTextInternal = defaultSearchQuery.value
 
     abstract suspend fun getSearchResultStream(query: Query): Flow<PagingData<Result>>
 
@@ -40,10 +45,15 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
 
     fun onApplySearch() {
         pendingAction = SearchAction.QUERY
+        syncSearchText()
+        hideSearchView()
     }
 
     fun onResetSearch() {
         pendingAction = SearchAction.RESET
+        updateSearchText(defaultSearchQuery.value)
+        syncSearchText()
+        hideSearchView()
     }
 
     fun onSearchViewHidden() = when (pendingAction) {
@@ -59,7 +69,7 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
 
     protected fun performQueryAction() {
         val query = constructSearchQuery(
-            searchText = searchText.trim(),
+            searchText = searchTextInternal,
             config = SearchQuery.Config(refresh = true)
         )
 
@@ -77,7 +87,7 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
         val currentQuery = searchQueryFlow.value
 
         val query = constructSearchQuery(
-            searchText = searchText,
+            searchText = searchTextInternal,
             config = SearchQuery.Config(refresh = false)
         )
 
@@ -89,15 +99,28 @@ abstract class SearchViewModel<Query : SearchQuery, Result : Any>(
     }
 
     private fun updateSearchText(text: String) {
-        searchText = text
+        searchTextInternal = text.trim()
+    }
+
+    private fun syncSearchText() {
+        _searchEffect.tryEmit(SearchEffect.UpdateSearchText(searchTextInternal))
+    }
+
+    private fun hideSearchView() {
+        _searchEffect.tryEmit(SearchEffect.HideSearchView())
     }
 
     private fun updateApplyButtonState() {
-        _applySearchButtonEnabled.value = searchText.isNotBlank()
+        val currentState = _searchState.value.applyButtonEnabled
+        val newState = searchTextInternal.isNotBlank()
+
+        if (currentState != newState) {
+            _searchState.value = _searchState.value.copy(applyButtonEnabled = newState)
+        }
     }
 
     private fun flushItems() {
-        searchQueryFlow.tryEmit(null)
+        searchQueryFlow.value = null
     }
 
     private fun performSearchQuery(query: Query) {
