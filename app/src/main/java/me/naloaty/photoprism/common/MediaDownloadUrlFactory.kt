@@ -1,11 +1,11 @@
 package me.naloaty.photoprism.common
 
-import me.naloaty.photoprism.di.session.SessionScope
-import me.naloaty.photoprism.di.session.qualifier.ApiUrl
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragementScope
+import me.naloaty.photoprism.di.session_flow_fragment.qualifier.ApiUrl
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession
 import javax.inject.Inject
 
-@SessionScope
+@SessionFlowFragementScope
 class MediaDownloadUrlFactory @Inject constructor(
     @ApiUrl apiUrl: String,
     session: LibraryAccountSession

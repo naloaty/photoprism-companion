@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import me.naloaty.photoprism.AppViewModel
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseFragment
-import me.naloaty.photoprism.base.flowFragmentViewModels
+import me.naloaty.photoprism.base.fragmentViewModels
 import me.naloaty.photoprism.databinding.FragmentLibraryConnectBinding
 import me.naloaty.photoprism.features.auth.presentation.model.AuthState
 import me.naloaty.photoprism.features.auth.presentation.model.bindToInputErrorState
@@ -19,10 +19,9 @@ import timber.log.Timber
 
 class LibraryConnectFragment: BaseFragment(R.layout.fragment_library_connect) {
 
-    private val viewModel: LibraryConnectViewModel by flowFragmentViewModels()
+    private val viewModel: LibraryConnectViewModel by fragmentViewModels()
     private val viewBinding: FragmentLibraryConnectBinding by viewBinding()
     private val appViewModel: AppViewModel by activityViewModels()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -6,13 +6,13 @@ import com.yandex.yatagan.Module
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.di.activity.ActivityScope
 import me.naloaty.photoprism.di.activity.qualifier.ActivityContext
-import me.naloaty.photoprism.di.flowfragment.FlowFragmentComponent
-import me.naloaty.photoprism.di.session.SessionComponent
+import me.naloaty.photoprism.di.flow_fragment.FlowFragmentComponent
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragmentComponent
 
 @Module(
     subcomponents = [
         FlowFragmentComponent::class,
-        SessionComponent::class
+        SessionFlowFragmentComponent::class
     ]
 )
 interface ActivityModule {

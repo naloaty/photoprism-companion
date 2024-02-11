@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.di.session.module
+package me.naloaty.photoprism.di.session_flow_fragment.module
 
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.Module

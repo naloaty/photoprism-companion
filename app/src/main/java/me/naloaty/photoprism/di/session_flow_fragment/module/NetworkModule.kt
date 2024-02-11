@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.di.session.module
+package me.naloaty.photoprism.di.session_flow_fragment.module
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.yandex.yatagan.Module
@@ -8,9 +8,9 @@ import kotlinx.serialization.json.Json
 import me.naloaty.photoprism.api.endpoint.albums.service.PhotoPrismAlbumService
 import me.naloaty.photoprism.api.endpoint.config.service.PhotoPrismClientConfigService
 import me.naloaty.photoprism.api.endpoint.media.service.PhotoPrismMediaService
-import me.naloaty.photoprism.di.session.SessionScope
-import me.naloaty.photoprism.di.session.qualifier.ApiUrl
-import me.naloaty.photoprism.di.session.qualifier.SessionRetrofit
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragementScope
+import me.naloaty.photoprism.di.session_flow_fragment.qualifier.ApiUrl
+import me.naloaty.photoprism.di.session_flow_fragment.qualifier.SessionRetrofit
 import me.naloaty.photoprism.features.auth.domain.PhotoPrismAuthInterceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -23,7 +23,7 @@ interface NetworkModule {
 
     companion object {
 
-        @[SessionScope Provides]
+        @[SessionFlowFragementScope Provides]
         fun provideOkHttpClient(authInterceptor: PhotoPrismAuthInterceptor): OkHttpClient {
             return OkHttpClient().newBuilder()
                 .addInterceptor(authInterceptor)
@@ -31,7 +31,7 @@ interface NetworkModule {
         }
 
 
-        @[SessionScope Provides SessionRetrofit]
+        @[SessionFlowFragementScope Provides SessionRetrofit]
         fun provideRetrofit(
             @ApiUrl apiUrl: String,
             okHttpClient: OkHttpClient,
@@ -52,15 +52,15 @@ interface NetworkModule {
         }
 
 
-        @[SessionScope Provides]
+        @[SessionFlowFragementScope Provides]
         fun providePhotoPrismMediaService(@SessionRetrofit retrofit: Retrofit) =
             retrofit.create<PhotoPrismMediaService>()
 
-        @[SessionScope Provides]
+        @[SessionFlowFragementScope Provides]
         fun providePhotoPrismClientConfigService(@SessionRetrofit retrofit: Retrofit) =
             retrofit.create<PhotoPrismClientConfigService>()
 
-        @[SessionScope Provides]
+        @[SessionFlowFragementScope Provides]
         fun providePhotoPrismAlbumService(@SessionRetrofit retrofit: Retrofit) =
             retrofit.create<PhotoPrismAlbumService>()
     }

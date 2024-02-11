@@ -15,6 +15,9 @@ class BottomNavViewModel: ViewModel()  {
     private var listScrolledByUser = false
     private var searchViewIsVisible = false
 
+    fun onGalleryNavigated() {
+        showBottomNavigation(R.anim.slide_in_bottom)
+    }
 
     fun onAlbumsNavigated() {
         onAlbumsContent = false
@@ -24,6 +27,10 @@ class BottomNavViewModel: ViewModel()  {
     fun onAlbumContentNavigated() {
         onAlbumsContent = true
         hideBottomNavigation(R.anim.zoom_in_exit_bottom)
+    }
+
+    fun onMediaViewerNavigated() {
+        hideBottomNavigation(R.anim.slide_out_bottom)
     }
 
     fun onSearchViewShowing() {

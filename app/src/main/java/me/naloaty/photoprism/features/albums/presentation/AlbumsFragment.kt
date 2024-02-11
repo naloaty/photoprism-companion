@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
-import me.naloaty.photoprism.base.flowFragmentViewModel
-import me.naloaty.photoprism.base.sessionViewModels
+import me.naloaty.photoprism.base.sessionFlowFragmentViewModel
+import me.naloaty.photoprism.base.sessionFragmentViewModel
 import me.naloaty.photoprism.databinding.FragmentAlbumsBinding
 import me.naloaty.photoprism.features.albums.presentation.recycler.AlbumsAdapter
 import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
@@ -34,9 +34,9 @@ private const val ALBUM_CELL_SPAN = 1
 
 class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
 
-    private val viewModel: AlbumsViewModel by sessionViewModels()
+    private val viewModel: AlbumsViewModel by sessionFragmentViewModel()
     private val binding: FragmentAlbumsBinding by viewBinding()
-    private val bottomNavViewModel: BottomNavViewModel by flowFragmentViewModel()
+    private val bottomNavViewModel: BottomNavViewModel by sessionFlowFragmentViewModel()
 
     private val albumsPagingAdapter = AlbumsAdapter()
     private val albumsFooterAdapter = LoadStateAdapter()

@@ -6,8 +6,8 @@ import me.naloaty.photoprism.AppActivity
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.di.activity.module.ActivityModule
 import me.naloaty.photoprism.di.app.AppComponent
-import me.naloaty.photoprism.di.flowfragment.FlowFragmentComponent
-import me.naloaty.photoprism.di.session.SessionComponent
+import me.naloaty.photoprism.di.flow_fragment.FlowFragmentComponent
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragmentComponent
 
 
 @ActivityScope
@@ -21,7 +21,7 @@ interface ActivityComponent {
 
     fun appComponent(): AppComponent
     fun flowFragmentComponentFactory(): FlowFragmentComponent.Builder
-    fun sessionComponentFactory(): SessionComponent.Builder
+    fun sessionFlowFragmentComponentFactory(): SessionFlowFragmentComponent.Builder
 
     fun inject(activity: AppActivity)
 

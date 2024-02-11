@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.map
 import me.naloaty.photoprism.common.DownloadUrlFactory
 import me.naloaty.photoprism.common.PreviewUrlFactory
 import me.naloaty.photoprism.db.AppDatabase
-import me.naloaty.photoprism.di.session.SessionScope
-import me.naloaty.photoprism.di.session.qualifier.MediaUrlFactory
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragementScope
+import me.naloaty.photoprism.di.session_flow_fragment.qualifier.MediaUrlFactory
 import me.naloaty.photoprism.features.gallery.data.mapper.toMediaItem
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository
 import javax.inject.Inject
 
-@SessionScope
+@SessionFlowFragementScope
 class MediaRepositoryImpl @Inject constructor(
     database: AppDatabase,
     private val mediatorFactory: MediaRemoteMediator.Factory,
@@ -28,6 +28,15 @@ class MediaRepositoryImpl @Inject constructor(
 
     private val searchQueryDao = database.gallerySearchQueryDao()
     private val searchResultDao = database.gallerySearchResultDao()
+    private val mediaItemDao = database.mediaItemDao()
+
+    override suspend fun getMediaItemById(mediaItemUid: String): MediaItem? {
+        return mediaItemDao.findCompoundByUid(mediaItemUid)
+            ?.toMediaItem(
+                previewUrlFactory = previewUrlFactory,
+                downloadUrlFactory = downloadUrlFactory
+            )
+    }
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getSearchResultStream(query: GallerySearchQuery): Flow<PagingData<MediaItem>> {
@@ -39,7 +48,7 @@ class MediaRepositoryImpl @Inject constructor(
                 pageSize = 50,
                 initialLoadSize = 100,
                 prefetchDistance = 50,
-                enablePlaceholders = true
+                enablePlaceholders = false
             ),
             pagingSourceFactory = {
                 searchResultDao.getPagingSource(queryId = searchQuery.id)

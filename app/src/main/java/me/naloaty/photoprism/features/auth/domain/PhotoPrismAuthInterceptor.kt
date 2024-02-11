@@ -1,6 +1,6 @@
 package me.naloaty.photoprism.features.auth.domain
 
-import me.naloaty.photoprism.di.session.SessionScope
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragementScope
 import me.naloaty.photoprism.features.auth.domain.exception.InvalidSessionException
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession
 import me.naloaty.photoprism.features.auth.domain.usecase.InvalidateSessionUseCase
@@ -8,7 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-@SessionScope
+@SessionFlowFragementScope
 class PhotoPrismAuthInterceptor @Inject constructor(
     private val handler: AuthExceptionHandler,
     private val session: LibraryAccountSession,

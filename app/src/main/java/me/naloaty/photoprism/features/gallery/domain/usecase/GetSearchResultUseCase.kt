@@ -1,11 +1,11 @@
 package me.naloaty.photoprism.features.gallery.domain.usecase
 
-import me.naloaty.photoprism.di.session.SessionScope
+import me.naloaty.photoprism.di.session_flow_fragment.SessionFlowFragementScope
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository
 import javax.inject.Inject
 
-@SessionScope
+@SessionFlowFragementScope
 class GetSearchResultUseCase @Inject constructor(
     private val repository: MediaRepository
 ) {

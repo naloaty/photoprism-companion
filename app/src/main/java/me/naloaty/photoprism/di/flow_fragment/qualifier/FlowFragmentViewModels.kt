@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.di.flowfragment.qualifier
+package me.naloaty.photoprism.di.flow_fragment.qualifier
 
 import javax.inject.Qualifier
 

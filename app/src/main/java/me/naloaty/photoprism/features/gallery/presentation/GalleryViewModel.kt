@@ -2,19 +2,16 @@ package me.naloaty.photoprism.features.gallery.presentation
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.naloaty.photoprism.features.common_search.SearchQuery.Config
 import me.naloaty.photoprism.features.common_search.SearchViewModel
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
+import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.usecase.GetAlbumUseCase
 import me.naloaty.photoprism.features.gallery.domain.usecase.GetSearchResultUseCase
-import me.naloaty.photoprism.features.gallery.presentation.mapper.toGalleryListItem
-import me.naloaty.photoprism.features.gallery.presentation.model.GalleryListItem
 import javax.inject.Inject
 
 
@@ -24,7 +21,7 @@ private const val EMPTY_ALBUM_FILTER = ""
 class GalleryViewModel @Inject constructor(
     private val getSearchResultUseCase: GetSearchResultUseCase,
     private val getAlbumUseCase: GetAlbumUseCase
-) : SearchViewModel<GallerySearchQuery, GalleryListItem>(
+) : SearchViewModel<GallerySearchQuery, MediaItem>(
     defaultSearchQuery = GallerySearchQuery(FULL_GALLERY_QUERY)
 ) {
 
@@ -32,6 +29,8 @@ class GalleryViewModel @Inject constructor(
 
     private val _albumTitle = MutableStateFlow<String?>(null)
     val albumTitle = _albumTitle.asStateFlow()
+
+    var sharedElementPosition = 0
 
     fun setAlbumFilter(albumUid: String) {
         albumFilter = "album:$albumUid"
@@ -53,13 +52,8 @@ class GalleryViewModel @Inject constructor(
 
     override suspend fun getSearchResultStream(
         query: GallerySearchQuery
-    ): Flow<PagingData<GalleryListItem>> {
+    ): Flow<PagingData<MediaItem>> {
         return getSearchResultUseCase(query)
-            .map { pagingData ->
-                pagingData.map { mediaItem ->
-                    mediaItem.toGalleryListItem()
-                }
-            }
     }
 
 }

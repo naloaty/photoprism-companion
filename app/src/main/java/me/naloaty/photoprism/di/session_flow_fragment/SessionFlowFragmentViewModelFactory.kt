@@ -1,14 +1,14 @@
-package me.naloaty.photoprism.di.flowfragment
+package me.naloaty.photoprism.di.session_flow_fragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.naloaty.photoprism.di.flowfragment.qualifier.FlowFragmentViewModels
+import me.naloaty.photoprism.di.session_flow_fragment.qualifier.SessionViewModels
 import javax.inject.Inject
 import javax.inject.Provider
 
-@FlowFragmentScope
-class FlowFragmentViewModelFactory @Inject constructor(
-    @FlowFragmentViewModels
+@SessionFlowFragementScope
+class SessionFlowFragmentViewModelFactory @Inject constructor(
+    @SessionViewModels
     private val providers: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ): ViewModelProvider.Factory {
 

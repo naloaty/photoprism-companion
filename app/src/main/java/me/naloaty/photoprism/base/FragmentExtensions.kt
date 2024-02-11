@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.view.View
-import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
@@ -15,31 +14,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 
 
-inline fun <reified VM : ViewModel> BaseFragment.flowFragmentViewModels() = viewModels<VM> {
+
+inline fun <reified VM : ViewModel> BaseFragment.fragmentViewModels() = viewModels<VM> {
     val flowFragment = requireParentFragment().requireParentFragment() as BaseFlowFragment
     flowFragment.flowFragmentComponent.viewModelFactory()
 }
 
-inline fun <reified VM : ViewModel> BaseFlowFragment.flowFragmentViewModels() = viewModels<VM> {
-    flowFragmentComponent.viewModelFactory()
-}
-
-
-inline fun <reified VM : ViewModel> BaseFragment.flowFragmentViewModel() = viewModels<VM>(
+inline fun <reified VM : ViewModel> BaseFragment.flowFragmentViewModels() = viewModels<VM>(
     ownerProducer = { requireParentFragment().requireParentFragment() }
-)
-
-
-fun Fragment.setupWindowInsets() {
-    view?.let {
-        it.setOnApplyWindowInsetsListener { _, windowInsets ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val imeHeight = windowInsets.getInsets(WindowInsets.Type.ime()).bottom
-                it.setPadding(0, 0, 0, imeHeight)
-            }
-            windowInsets
-        }
-    }
+){
+    val flowFragment = requireParentFragment().requireParentFragment() as BaseFlowFragment
+    flowFragment.flowFragmentComponent.viewModelFactory()
 }
 
 fun Fragment.setSoftInputAdjustResize(root: View) {

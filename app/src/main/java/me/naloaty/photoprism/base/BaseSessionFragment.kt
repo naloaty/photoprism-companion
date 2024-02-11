@@ -12,7 +12,7 @@ abstract class BaseSessionFragment(@LayoutRes layoutId: Int): Fragment(layoutId)
 
         (flowFragment as MainFlowFragment)
             .sessionComponent
-            .fragmentWithSessionComponentFactory()
+            .sessionFragmentComponentFactory()
             .create()
     }
 

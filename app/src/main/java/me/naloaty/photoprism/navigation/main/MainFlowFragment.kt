@@ -35,7 +35,7 @@ class MainFlowFragment : BaseFlowFragment(
     val sessionComponent by lazy {
         (requireActivity() as BaseActivity)
             .activityComponent
-            .sessionComponentFactory()
+            .sessionFlowFragmentComponentFactory()
             .create(
                 account = args.account,
                 session = args.session
@@ -58,8 +58,10 @@ class MainFlowFragment : BaseFlowFragment(
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.gallery_fragment -> bottomNavViewModel.onGalleryNavigated()
                 R.id.album_content_fragment -> bottomNavViewModel.onAlbumContentNavigated()
                 R.id.albums_fragment -> bottomNavViewModel.onAlbumsNavigated()
+                R.id.media_view_fragment -> bottomNavViewModel.onMediaViewerNavigated()
             }
         }
     }

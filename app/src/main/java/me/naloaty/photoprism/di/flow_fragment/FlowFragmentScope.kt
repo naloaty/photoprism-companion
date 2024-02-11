@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.di.flowfragment
+package me.naloaty.photoprism.di.flow_fragment
 
 import javax.inject.Scope
 

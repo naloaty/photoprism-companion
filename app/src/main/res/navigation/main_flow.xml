@@ -9,7 +9,12 @@
         android:id="@+id/gallery_fragment"
         android:name="me.naloaty.photoprism.features.gallery.presentation.GalleryFragment"
         android:label="fragment_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery">
+
+        <action
+            android:id="@+id/action_view_media"
+            app:destination="@id/media_view_fragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/albums_fragment"
@@ -28,14 +33,27 @@
     <fragment
         android:id="@+id/album_content_fragment"
         android:name="me.naloaty.photoprism.features.gallery.presentation.GalleryFragment"
-        android:label="fragment_gallery"
         tools:layout="@layout/fragment_gallery" >
         <argument
             android:name="albumUid"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+
+        <action
+            android:id="@+id/action_view_media"
+            app:destination="@id/media_view_fragment"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/media_view_fragment"
+        android:name="me.naloaty.photoprism.features.media_viewer.ui.MediaViewerFragment"
+        tools:layout="@layout/fragment_gallery">
+
+        <argument
+            android:name="mediaId"
+            app:argType="string"
+            app:nullable="false"/>
+    </fragment>
 
 </navigation>

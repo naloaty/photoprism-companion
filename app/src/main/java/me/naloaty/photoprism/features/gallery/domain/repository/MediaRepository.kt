@@ -7,6 +7,8 @@ import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 
 interface MediaRepository {
 
+    suspend fun getMediaItemById(mediaItemUid: String): MediaItem?
+
     suspend fun getSearchResultStream(query: GallerySearchQuery): Flow<PagingData<MediaItem>>
 
     suspend fun getSearchResultCount(query: GallerySearchQuery): Flow<Int>

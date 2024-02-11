@@ -1,10 +1,10 @@
-package me.naloaty.photoprism.di.flowfragment
+package me.naloaty.photoprism.di.flow_fragment
 
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import me.naloaty.photoprism.base.BaseFlowFragment
-import me.naloaty.photoprism.di.flowfragment.module.FlowFragmentModule
-import me.naloaty.photoprism.di.flowfragment.module.FlowFragmentViewModelModule
+import me.naloaty.photoprism.di.flow_fragment.module.FlowFragmentModule
+import me.naloaty.photoprism.di.flow_fragment.module.FlowFragmentViewModelModule
 import me.naloaty.photoprism.di.fragment.FragmentComponent
 import me.naloaty.photoprism.navigation.main.MainFlowFragment
 
