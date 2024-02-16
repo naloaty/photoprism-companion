@@ -48,7 +48,7 @@ class MediaRepositoryImpl @Inject constructor(
                 pageSize = 50,
                 initialLoadSize = 100,
                 prefetchDistance = 50,
-                enablePlaceholders = false
+                enablePlaceholders = true
             ),
             pagingSourceFactory = {
                 searchResultDao.getPagingSource(queryId = searchQuery.id)

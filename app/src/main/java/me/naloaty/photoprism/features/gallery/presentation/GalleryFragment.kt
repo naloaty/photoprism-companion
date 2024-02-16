@@ -65,7 +65,7 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
         galleryPagingAdapter = GalleryAdapter()
 
         setupGallerySearch()
-        scrollToSharedElement()
+        //scrollToSharedElement()
         binding.rvGallery.post { setupGalleryList(args.albumUid) }
 
         loadStateRenderer = LoadStateRenderer(
@@ -135,8 +135,8 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
     }
 
     private fun setupGalleryList(albumUid: String?) = with(binding) {
-        galleryPagingAdapter.onItemClickListener = { media ->
-            val directions = GalleryFragmentDirections.actionViewMedia(media.uid)
+        galleryPagingAdapter.onItemClickListener = { position, item ->
+            val directions = GalleryFragmentDirections.actionViewMedia(position)
             findNavController().navigateSafely(directions)
         }
 
@@ -154,7 +154,7 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
             launch {
                 galleryViewModel.searchQueryResult.collectLatest {
                     val galleryData = it.map { mediaItem -> mediaItem.toGalleryListItem() }
-                    galleryPagingAdapter.submitData(galleryData)
+                    galleryPagingAdapter.submitData(viewLifecycleOwner.lifecycle, galleryData)
                 }
             }
 

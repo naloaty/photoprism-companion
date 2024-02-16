@@ -51,8 +51,8 @@
         tools:layout="@layout/fragment_gallery">
 
         <argument
-            android:name="mediaId"
-            app:argType="string"
+            android:name="position"
+            app:argType="integer"
             app:nullable="false"/>
     </fragment>
 

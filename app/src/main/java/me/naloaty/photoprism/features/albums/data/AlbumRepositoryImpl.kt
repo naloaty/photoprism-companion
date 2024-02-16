@@ -42,7 +42,7 @@ class AlbumRepositoryImpl @Inject constructor(
                 initialLoadSize = NETWORK_PAGE_SIZE * 2,
                 prefetchDistance = NETWORK_PAGE_SIZE,
                 jumpThreshold = NETWORK_PAGE_SIZE * 3,
-                enablePlaceholders = false
+                enablePlaceholders = true
             ),
             pagingSourceFactory = {
                 searchResultDao.getPagingSource(queryId = searchQuery.id)

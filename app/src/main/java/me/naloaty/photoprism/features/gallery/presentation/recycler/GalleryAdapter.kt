@@ -12,7 +12,7 @@ class GalleryAdapter : PagingDataAdapter<GalleryListItem, RecyclerView.ViewHolde
     GalleryDiffCallback()
 ) {
 
-    var onItemClickListener: ((GalleryListItem.Media) -> Unit)? = null
+    var onItemClickListener: ((Int, GalleryListItem.Media) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -20,8 +20,10 @@ class GalleryAdapter : PagingDataAdapter<GalleryListItem, RecyclerView.ViewHolde
         return when (viewType) {
             R.layout.li_gallery_media_item -> MediaItemViewHolder(
                 binding = LiGalleryMediaItemBinding.inflate(inflater, parent, false),
-                onClickListener = { onItemClickListener?.invoke(it) },
-                onLoadCompletedListener = {  }
+                onClickListener = { position, item ->
+                    onItemClickListener?.invoke(position, item)
+                },
+                onLoadCompletedListener = { }
             )
 
             else -> throw IllegalStateException("Unknown view type '$viewType'")

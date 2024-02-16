@@ -53,6 +53,7 @@ class GalleryViewModel @Inject constructor(
     override suspend fun getSearchResultStream(
         query: GallerySearchQuery
     ): Flow<PagingData<MediaItem>> {
+        sharedElementPosition = 0
         return getSearchResultUseCase(query)
     }
 

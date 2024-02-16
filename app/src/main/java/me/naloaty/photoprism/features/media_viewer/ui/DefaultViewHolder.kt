@@ -1,8 +1,7 @@
-package me.naloaty.photoprism.features.gallery.presentation.recycler
+package me.naloaty.photoprism.features.media_viewer.ui
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -10,24 +9,30 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import me.naloaty.photoprism.R
-import me.naloaty.photoprism.databinding.LiGalleryMediaItemBinding
-import me.naloaty.photoprism.features.gallery.presentation.model.GalleryListItem
+import me.naloaty.photoprism.databinding.LayoutDefaultPreviewBinding
+import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 
-class MediaItemViewHolder(
-    private val binding: LiGalleryMediaItemBinding,
-    private val onClickListener: (Int, GalleryListItem.Media) -> Unit,
+class DefaultViewHolder(
+    private val binding: LayoutDefaultPreviewBinding,
+    private val onClickListener: (MediaItem) -> Unit,
     private val onLoadCompletedListener: (position: Int) -> Unit
 ) : ViewHolder(binding.root) {
 
     private var thumbnailTarget: Target<*>? = null
-    private var media: GalleryListItem.Media? = null
+    private var media: MediaItem? = null
 
     private val requestManager = Glide.with(binding.ivItemThumbnail)
+
+    init {
+        binding.root.setOnClickListener {
+            media?.let { onClickListener.invoke(it) }
+        }
+    }
 
     val sharedElement: View?
         get() = binding.ivItemThumbnail.takeIf { media != null }
 
-    fun bind(position: Int, item: GalleryListItem.Media?) {
+    fun bind(position: Int, item: MediaItem?) {
         dispose()
         this.media = item
 
@@ -39,29 +44,14 @@ class MediaItemViewHolder(
     }
 
     private fun bindAsPlaceholder() = with(binding) {
-        ivItemType.isVisible = false
         ivItemThumbnail.setImageResource(R.color.transparent)
     }
 
-    private fun bindAsRegularItem(position: Int, item: GalleryListItem.Media) = with(binding) {
-        if (item.typeIcon != null) {
-            ivItemType.isVisible = true
-            ivItemType.setImageResource(item.typeIcon)
-        } else {
-            ivItemType.isVisible = false
-        }
-
-        root.setOnClickListener {
-            media?.let { onClickListener.invoke(position, item) }
-        }
-
-        //ivItemThumbnail.transitionName = item.uid
-        ivItemThumbnail.contentDescription = item.title
-
+    private fun bindAsRegularItem(position: Int, item: MediaItem) = with(binding) {
         thumbnailTarget = requestManager
-            .load(item.thumbnailUrl)
+            .load(item.mediumThumbnailUrl)
             //.listener(createRequestListener(position))
-            .centerCrop()
+            .fitCenter()
             .placeholder(R.color.empty_image)
             .into(ivItemThumbnail)
     }

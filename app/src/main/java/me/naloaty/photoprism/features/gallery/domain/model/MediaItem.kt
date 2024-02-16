@@ -14,7 +14,7 @@ sealed interface MediaItem {
     val smallThumbnailUrl: String
     val mediumThumbnailUrl: String
 
-    sealed interface ViewableAsImage {
+    sealed interface ViewableAsImage : MediaItem {
         val largeThumbnailUrl: String
     }
 

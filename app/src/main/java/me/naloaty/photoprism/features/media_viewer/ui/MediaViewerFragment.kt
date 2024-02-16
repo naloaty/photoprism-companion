@@ -7,7 +7,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import androidx.paging.map
 import androidx.viewpager2.widget.ViewPager2
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -18,8 +17,6 @@ import me.naloaty.photoprism.base.sessionFlowFragmentViewModel
 import me.naloaty.photoprism.databinding.FragmentMediaViewerBinding
 import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.features.gallery.presentation.GalleryViewModel
-import me.naloaty.photoprism.features.gallery.presentation.mapper.toGalleryListItem
-import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 
 class MediaViewerFragment: BaseSessionFragment(R.layout.fragment_media_viewer) {
 
@@ -27,13 +24,13 @@ class MediaViewerFragment: BaseSessionFragment(R.layout.fragment_media_viewer) {
 
     private val galleryViewModel: GalleryViewModel by sessionFlowFragmentViewModel()
 
-    private var mediaViewerAdapter: GalleryAdapter by viewLifecycleProperty()
+    private var mediaViewerAdapter: MediaViewerAdapter by viewLifecycleProperty()
 
     private val args: MediaViewerFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mediaViewerAdapter = GalleryAdapter()
+        mediaViewerAdapter = MediaViewerAdapter()
 
         setupViewPager()
         //setupSharedElementTransition()
@@ -57,15 +54,14 @@ class MediaViewerFragment: BaseSessionFragment(R.layout.fragment_media_viewer) {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch {
                     galleryViewModel.searchQueryResult.collectLatest {
-                        val galleryData = it.map { mediaItem -> mediaItem.toGalleryListItem() }
-                        mediaViewerAdapter.submitData(galleryData)
+                        mediaViewerAdapter.submitData(viewLifecycleOwner.lifecycle, it)
                     }
                 }
             }
         }
 
         viewPager.run {
-            post { setCurrentItem(0, false) }
+            post { setCurrentItem(args.position, false) }
         }
     }
 
