@@ -29,6 +29,8 @@ buildscript {
         fastScrollVersion = "1.2.0"
         dataStoreVersion = "1.0.0"
         elmslieVersion = "3.0.0-alpha10"
+        koteaVersion = "1.1.0"
+        tiRecycler = "2.2.1"
     }
 
     dependencies {

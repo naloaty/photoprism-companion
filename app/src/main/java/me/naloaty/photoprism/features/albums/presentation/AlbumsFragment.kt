@@ -54,7 +54,7 @@ class AlbumsFragment : BaseSessionFragment(R.layout.fragment_albums) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fragmentWithSessionComponent.inject(this)
+        sessionFragmentComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

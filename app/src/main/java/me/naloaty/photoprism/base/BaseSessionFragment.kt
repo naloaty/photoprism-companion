@@ -7,7 +7,7 @@ import me.naloaty.photoprism.navigation.main.MainFlowFragment
 
 abstract class BaseSessionFragment(@LayoutRes layoutId: Int): Fragment(layoutId) {
 
-    val fragmentWithSessionComponent by lazy {
+    val sessionFragmentComponent by lazy {
         val flowFragment = requireParentFragment().requireParentFragment()
 
         (flowFragment as MainFlowFragment)
