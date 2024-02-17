@@ -30,7 +30,7 @@ interface GalleryStoreModule {
             @CommandHandlers commandHandlers: List<GalleryCommandHandler>
         ): GalleryStore {
             return KoteaStore(
-                initialState = GalleryState(emptyList()),
+                initialState = GalleryState(),
                 initialCommands = listOf(PerformSearch(FULL_GALLERY_QUERY)),
                 commandsFlowHandlers = commandHandlers,
                 update = update

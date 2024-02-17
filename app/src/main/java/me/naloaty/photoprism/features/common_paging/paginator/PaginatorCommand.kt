@@ -4,7 +4,7 @@ sealed interface PaginatorCommand {
 
     data class LoadNextPage<T>(
         val currentData: List<T>,
-        val pageNumber: Int
+        val isRefresh: Boolean = false
     ) : PaginatorCommand
 
 }

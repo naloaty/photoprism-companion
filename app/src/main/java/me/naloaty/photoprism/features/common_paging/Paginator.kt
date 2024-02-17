@@ -13,22 +13,21 @@ import me.naloaty.photoprism.features.common_paging.paginator.PaginatorCommand
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorState
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorUiEvent
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorUpdate
+import me.naloaty.photoprism.features.common_paging.paginator.RemotePageLoader
 import me.naloaty.photoprism.features.common_paging.paginator.command_handler.LoadNextPageCommandHandler
 import ru.tinkoff.kotea.core.KoteaStore
 
 
 fun <T : Any, R: Any> paginatorByOffset(
-    pageSize: Int,
     refreshEvents: Flow<Any>,
     restartEvents: Flow<Any>,
     loadMoreEvents: Flow<Any>,
     nextPageFilterStrategy: NextPageFilterStrategy<T>,
-    getFromRemote: (offset: Int) -> List<T>,
+    getFromRemote: RemotePageLoader<T>,
     mapState: (state: PagingState<T>) -> R,
     mapError: (error: PagingError) -> R
 ): Flow<R> {
     return PaginatorImpl(
-        pageSize = pageSize,
         refreshEvents = refreshEvents,
         restartEvents = restartEvents,
         loadMoreEvents = loadMoreEvents,
@@ -41,12 +40,11 @@ fun <T : Any, R: Any> paginatorByOffset(
 
 
 private class PaginatorImpl<out T : Any, R: Any>(
-    private val pageSize: Int,
     private val refreshEvents: Flow<Any>,
     private val restartEvents: Flow<Any>,
     private val loadMoreEvents: Flow<Any>,
     private val nextPageFilterStrategy: NextPageFilterStrategy<T>,
-    private val getFromRemote: (offset: Int) -> List<T>,
+    private val getFromRemote: RemotePageLoader<T>,
     private val mapState: (state: PagingState<T>) -> R,
     private val mapError: (error: PagingError) -> R
 ): Flow<R> {
@@ -56,10 +54,10 @@ private class PaginatorImpl<out T : Any, R: Any>(
                 pagingState = PagingState.EmptyProgress
             ),
             initialCommands = listOf(
-                PaginatorCommand.LoadNextPage<T>(emptyList(), 0)
+                PaginatorCommand.LoadNextPage<T>(emptyList())
             ),
             commandsFlowHandlers = listOf(
-                LoadNextPageCommandHandler(pageSize, nextPageFilterStrategy, getFromRemote)
+                LoadNextPageCommandHandler(nextPageFilterStrategy, getFromRemote)
             ),
             update = PaginatorUpdate()
         )

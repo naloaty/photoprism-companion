@@ -11,23 +11,24 @@ import ru.tinkoff.mobile.tech.ti_recycler.base.BaseViewHolder
 import ru.tinkoff.mobile.tech.ti_recycler.base.ViewTyped
 import ru.tinkoff.mobile.tech.ti_recycler.clicks.TiRecyclerClickListener
 
-data class MediaItemUi(
+data class MediaItemListUi(
     override val uid: String,
     val title: String,
     val thumbnailUrl: String,
     @DrawableRes val typeIcon: Int? = null,
+) : ViewTyped {
     override val viewType: Int = R.layout.li_gallery_media_item
-) : ViewTyped
+}
 
 
-class MediaItemUiViewHolder(view: View, clicks: TiRecyclerClickListener) :
-    BaseViewHolder<MediaItemUi>(view, clicks) {
+class MediaItemListUiViewHolder(view: View, clicks: TiRecyclerClickListener) :
+    BaseViewHolder<MediaItemListUi>(view, clicks) {
 
     private val binding = LiGalleryMediaItemBinding.bind(view)
     private var thumbnailTarget: Target<*>? = null
     private val requestManager = Glide.with(view)
 
-    override fun bind(item: MediaItemUi) = with(binding) {
+    override fun bind(item: MediaItemListUi) = with(binding) {
         if (item.typeIcon != null) {
             ivItemType.isVisible = true
             ivItemType.setImageResource(item.typeIcon)

@@ -8,18 +8,19 @@ import me.naloaty.photoprism.features.common_paging.paginator.PaginatorCommand
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorCommandHandler
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorCommandResult
 import me.naloaty.photoprism.features.common_paging.paginator.PaginatorEvent
+import me.naloaty.photoprism.features.common_paging.paginator.RemotePageLoader
 
 class LoadNextPageCommandHandler<T : Any>(
-    private val pageSize: Int,
-    private val nextPageFilter: NextPageFilterStrategy<T>,
-    private val getFromRemote: (offset: Int) -> List<T>
+    private val nextPageFilterStrategy: NextPageFilterStrategy<T>,
+    private val getFromRemote: RemotePageLoader<T>
 ): PaginatorCommandHandler<T> {
     override fun handle(commands: Flow<PaginatorCommand>): Flow<PaginatorEvent<T>> {
         return commands.filterIsInstance<PaginatorCommand.LoadNextPage<T>>()
-            .map {
+            .map { command ->
                 try {
-                    val nextPage = getFromRemote(pageSize * it.pageNumber)
-                    val filteredPage = nextPageFilter(it.currentData, nextPage)
+                    val offset = if (command.isRefresh) 0 else command.currentData.size
+                    val nextPage = getFromRemote(offset)
+                    val filteredPage = nextPageFilterStrategy(command.currentData, nextPage)
                     PaginatorCommandResult.LoadNextPageResult(filteredPage)
                 } catch (e: Throwable) {
                     PaginatorCommandResult.LoadNextPageError(e)

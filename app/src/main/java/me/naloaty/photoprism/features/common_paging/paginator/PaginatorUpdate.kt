@@ -28,9 +28,10 @@ class PaginatorUpdate<T : Any> :
             is PaginatorUiEvent.Refresh -> when (state) {
                 is PagingState.Empty -> PagingState.EmptyProgress
                 is PagingState.EmptyError -> PagingState.EmptyProgress
-                is PagingState.Data -> PagingState.Refresh(state.pageCount, state.data)
-                is PagingState.NewPageProgress -> PagingState.Refresh(state.pageCount, state.data)
-                is PagingState.FullData -> PagingState.Refresh(state.pageCount, state.data)
+                is PagingState.Data -> PagingState.Refresh(state.data)
+                is PagingState.NewPageProgress -> PagingState.Refresh(state.data)
+                is PagingState.NewPageError -> PagingState.Refresh(state.data)
+                is PagingState.FullData -> PagingState.Refresh(state.data)
                 else -> state
             }
             is PaginatorUiEvent.Restart -> when (state) {
@@ -39,11 +40,13 @@ class PaginatorUpdate<T : Any> :
                 is PagingState.Data -> PagingState.EmptyProgress
                 is PagingState.Refresh -> PagingState.EmptyProgress
                 is PagingState.NewPageProgress -> PagingState.EmptyProgress
+                is PagingState.NewPageError -> PagingState.EmptyProgress
                 is PagingState.FullData -> PagingState.EmptyProgress
                 else -> state
             }
             is PaginatorUiEvent.LoadMore -> when (state) {
-                is PagingState.Data -> PagingState.NewPageProgress(state.pageCount, state.data)
+                is PagingState.Data -> PagingState.NewPageProgress(state.data)
+                is PagingState.NewPageError -> PagingState.NewPageProgress(state.data)
                 else -> state
             }
             is PaginatorCommandResult.LoadNextPageResult -> when (state) {
@@ -51,29 +54,29 @@ class PaginatorUpdate<T : Any> :
                     if (event.items.isEmpty()) {
                         PagingState.Empty
                     } else {
-                        PagingState.Data(1, event.items)
+                        PagingState.Data(event.items)
                     }
                 }
                 is PagingState.Refresh -> {
                     if (event.items.isEmpty()) {
                         PagingState.Empty
                     } else {
-                        PagingState.Data(1, event.items)
+                        PagingState.Data(event.items)
                     }
                 }
                 is PagingState.NewPageProgress -> {
                     if (event.items.isEmpty()) {
-                        PagingState.FullData(state.pageCount, state.data)
+                        PagingState.FullData(state.data)
                     } else {
-                        PagingState.Data(state.pageCount + 1, state.data + event.items)
+                        PagingState.Data(state.data + event.items)
                     }
                 }
                 else -> state
             }
             is PaginatorCommandResult.LoadNextPageError -> when (state) {
                 is PagingState.EmptyProgress -> PagingState.EmptyError(event.error)
-                is PagingState.Refresh -> PagingState.Data(state.pageCount, state.data)
-                is PagingState.NewPageProgress -> PagingState.Data(state.pageCount, state.data)
+                is PagingState.Refresh -> PagingState.Data(state.data)
+                is PagingState.NewPageProgress -> PagingState.NewPageError(state.data)
                 else -> state
             }
         }
@@ -86,11 +89,14 @@ class PaginatorUpdate<T : Any> :
         return when (event) {
             is PaginatorUiEvent.Restart,
             is PaginatorUiEvent.Refresh -> listOf(
-                PaginatorCommand.LoadNextPage(state.data,  0)
+                PaginatorCommand.LoadNextPage(state.data,  isRefresh = true)
             )
             is PaginatorUiEvent.LoadMore -> when (state) {
                 is PagingState.Data -> listOf(
-                    PaginatorCommand.LoadNextPage(state.data, state.pageCount + 1)
+                    PaginatorCommand.LoadNextPage(state.data)
+                )
+                is PagingState.NewPageError -> listOf(
+                    PaginatorCommand.LoadNextPage(state.data)
                 )
                 else -> emptyList()
             }
@@ -105,7 +111,9 @@ class PaginatorUpdate<T : Any> :
         return when (event) {
             is PaginatorCommandResult.LoadNextPageError -> when (state) {
                 is PagingState.Refresh,
-                is PagingState.NewPageProgress -> listOf(PagingError.PageLoadError(event.error))
+                is PagingState.NewPageProgress -> listOf(
+                    PagingError.PageLoadError(event.error)
+                )
                 else -> emptyList()
             }
             else -> emptyList()

@@ -25,30 +25,39 @@ fun MediaItemDbCompound.toMediaItem(
     MediaItemDbEntity.Type.UNKNOWN -> this.toUnknownMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.IMAGE -> this.toImageMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.RAW -> this.toRawMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.ANIMATED -> this.toAnimatedMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.LIVE -> this.toLiveMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.VIDEO -> this.toVideoMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.VECTOR -> this.toVectorMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.SIDECAR -> this.toSidecarMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.TEXT -> this.toTextMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
+
     MediaItemDbEntity.Type.OTHER -> this.toOtherMediaItem(
         previewUrlFactory, downloadUrlFactory
     )
@@ -67,7 +76,7 @@ private fun MediaItemDbCompound.toUnknownMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -88,7 +97,7 @@ private fun MediaItemDbCompound.toAnimatedMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -109,7 +118,7 @@ private fun MediaItemDbCompound.toLiveMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -130,7 +139,7 @@ private fun MediaItemDbCompound.toVideoMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -151,7 +160,7 @@ private fun MediaItemDbCompound.toSidecarMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -172,7 +181,7 @@ private fun MediaItemDbCompound.toTextMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -193,7 +202,7 @@ private fun MediaItemDbCompound.toOtherMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -215,7 +224,7 @@ private fun MediaItemDbCompound.toImageMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -237,7 +246,7 @@ private fun MediaItemDbCompound.toRawMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -259,7 +268,7 @@ private fun MediaItemDbCompound.toVectorMediaItem(
         hash = this.hash,
         width = this.width,
         height = this.height,
-        files = files.toMediaFiles(
+        files = files.dbToMediaFiles(
             previewUrlFactory = previewUrlFactory,
             downloadUrlFactory = downloadUrlFactory
         ),
@@ -290,7 +299,7 @@ fun PhotoPrismMediaItem.Type.toDbType() = when (this) {
 fun List<PhotoPrismMediaItem>.toMediaItemDbCompounds() =
     this.map { it.toMediaItemDbCompound() }
 
-fun PhotoPrismMediaItem.toMediaItemDbCompound() = when(type) {
+fun PhotoPrismMediaItem.toMediaItemDbCompound() = when (type) {
     PhotoPrismMediaItem.Type.UNKNOWN -> this.toBasicDbCompound()
     PhotoPrismMediaItem.Type.IMAGE -> this.toViewableDbCompound()
     PhotoPrismMediaItem.Type.RAW -> this.toViewableDbCompound()
@@ -332,3 +341,220 @@ fun PhotoPrismMediaItem.toViewableDbCompound() =
         ),
         files = files.toMediaFileDbEntities()
     )
+
+
+/**
+ * PhotoPrism -> Domain
+ */
+
+fun PhotoPrismMediaItem.toMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = when (type) {
+    PhotoPrismMediaItem.Type.UNKNOWN -> this.toUnknownMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.IMAGE -> this.toImageMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.RAW -> this.toRawMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.ANIMATED -> this.toAnimatedMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.LIVE -> this.toLiveMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.VIDEO -> this.toVideoMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.VECTOR -> this.toVectorMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.SIDECAR -> this.toSidecarMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.TEXT -> this.toTextMediaItem(previewUrlFactory, downloadUrlFactory)
+    PhotoPrismMediaItem.Type.OTHER -> this.toOtherMediaItem(previewUrlFactory, downloadUrlFactory)
+}
+
+
+private fun PhotoPrismMediaItem.toUnknownMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Unknown(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toAnimatedMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Animated(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toLiveMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Live(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toVideoMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Video(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toSidecarMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Sidecar(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toTextMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Text(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toOtherMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Other(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash)
+)
+
+
+private fun PhotoPrismMediaItem.toImageMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Image(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    largeThumbnailUrl = previewUrlFactory.getLargeThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toRawMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Raw(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    largeThumbnailUrl = previewUrlFactory.getLargeThumbnailUrl(this.hash)
+)
+
+private fun PhotoPrismMediaItem.toVectorMediaItem(
+    previewUrlFactory: PreviewUrlFactory,
+    downloadUrlFactory: DownloadUrlFactory
+) = MediaItem.Vector(
+    uid = this.uid,
+    takenAt = this.takenAt,
+    title = this.title,
+    description = this.description,
+    hash = this.hash,
+    width = this.width,
+    height = this.height,
+    files = files.toMediaFiles(
+        previewUrlFactory = previewUrlFactory,
+        downloadUrlFactory = downloadUrlFactory
+    ),
+    smallThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    mediumThumbnailUrl = previewUrlFactory.getSmallThumbnailUrl(this.hash),
+    largeThumbnailUrl = previewUrlFactory.getLargeThumbnailUrl(this.hash)
+)
+

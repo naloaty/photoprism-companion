@@ -106,6 +106,7 @@ dependencies {
     // Tinkoff TEA implementation
     implementation("ru.tinkoff.kotea:core:$koteaVersion")
     implementation("ru.tinkoff.kotea:android:$koteaVersion")
+    implementation "ru.tinkoff.kotea:logging:$koteaVersion"
 
     // TiRecycler
     implementation "ru.tinkoff.mobile:ti-recycler-coroutines:$tiRecycler"

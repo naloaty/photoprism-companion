@@ -30,6 +30,8 @@ import me.naloaty.photoprism.features.common_search.initSearch
 import me.naloaty.photoprism.features.gallery.presentation.mapper.toGalleryListItem
 import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 import me.naloaty.photoprism.features.gallery.presentation.recycler.MediaItemViewHolder
+import me.naloaty.photoprism.features.gallery_v2.ui.GalleryFragmentArgs
+import me.naloaty.photoprism.features.gallery_v2.ui.GalleryFragmentDirections
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import me.naloaty.photoprism.navigation.navigateSafely
 import timber.log.Timber
