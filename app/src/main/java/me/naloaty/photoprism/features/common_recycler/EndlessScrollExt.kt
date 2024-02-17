@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.features.common_recycler.model
+package me.naloaty.photoprism.features.common_recycler
 
 import android.os.Looper
 import android.view.View
@@ -34,12 +34,13 @@ fun RecyclerView.endlessScrollFlow(
 
 
 // From FastAdapter
-abstract class EndlessRecyclerOnScrollListener : RecyclerView.OnScrollListener {
+abstract class EndlessRecyclerOnScrollListener(
+    private val visibleThreshold: Int
+) : RecyclerView.OnScrollListener() {
 
     private var enabled = true
     private var previousTotal = 0
     private var isLoading = true
-    private var visibleThreshold = RecyclerView.NO_POSITION
     var firstVisibleItem: Int = 0
         private set
     var visibleItemCount: Int = 0
@@ -56,19 +57,8 @@ abstract class EndlessRecyclerOnScrollListener : RecyclerView.OnScrollListener {
     lateinit var layoutManager: RecyclerView.LayoutManager
         private set
 
-    constructor()
-
-    constructor(visibleThreshold: Int) {
-        this.visibleThreshold = visibleThreshold
-    }
-
     private fun findFirstVisibleItemPosition(recyclerView: RecyclerView): Int {
         val child = findOneVisibleChild(0, layoutManager.childCount, false, true)
-        return if (child == null) RecyclerView.NO_POSITION else recyclerView.getChildAdapterPosition(child)
-    }
-
-    private fun findLastVisibleItemPosition(recyclerView: RecyclerView): Int {
-        val child = findOneVisibleChild(recyclerView.childCount - 1, -1, false, true)
         return if (child == null) RecyclerView.NO_POSITION else recyclerView.getChildAdapterPosition(child)
     }
 
@@ -120,10 +110,6 @@ abstract class EndlessRecyclerOnScrollListener : RecyclerView.OnScrollListener {
                     ?: throw RuntimeException("A LayoutManager is required")
             }
 
-            if (visibleThreshold == RecyclerView.NO_POSITION) {
-                visibleThreshold = findLastVisibleItemPosition(recyclerView) - findFirstVisibleItemPosition(recyclerView)
-            }
-
             visibleItemCount = recyclerView.childCount
             totalItemCount = layoutManager.itemCount
             firstVisibleItem = findFirstVisibleItemPosition(recyclerView)
@@ -135,11 +121,8 @@ abstract class EndlessRecyclerOnScrollListener : RecyclerView.OnScrollListener {
                 }
             }
             if (!isLoading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
-
                 currentPage++
-
                 onLoadMore(currentPage)
-
                 isLoading = true
             }
         }

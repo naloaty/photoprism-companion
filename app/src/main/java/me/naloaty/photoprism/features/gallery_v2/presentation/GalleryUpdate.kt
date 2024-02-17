@@ -11,7 +11,6 @@ import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryUiEvent.OnL
 import ru.tinkoff.kotea.core.CommandsFlowHandler
 import ru.tinkoff.kotea.core.Store
 import ru.tinkoff.kotea.core.dsl.DslUpdate
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -28,9 +27,6 @@ class GalleryUpdate @Inject constructor(
         is PerformSearchResult -> state { copy(listState = event.listState) }
         is PerformSearchError -> Unit
         is OnClickRestart -> commands(Restart)
-        is OnLoadMore -> {
-            Timber.d("OnLoadMore")
-            commands(LoadMore)
-        }
+        is OnLoadMore -> commands(LoadMore)
     }
 }

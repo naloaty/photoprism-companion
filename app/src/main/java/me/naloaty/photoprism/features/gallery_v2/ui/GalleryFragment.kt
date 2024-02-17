@@ -20,7 +20,7 @@ import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
 import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItem
-import me.naloaty.photoprism.features.common_recycler.model.endlessScrollFlow
+import me.naloaty.photoprism.features.common_recycler.endlessScrollFlow
 import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryNews
 import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryUiEvent
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
