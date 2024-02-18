@@ -5,8 +5,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -30,7 +28,6 @@ import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySear
 import me.naloaty.photoprism.features.gallery_v2.ui.model.GallerySearchUiState
 import me.naloaty.photoprism.features.gallery_v2.ui.model.GalleryUiState
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
-import me.naloaty.photoprism.navigation.navigateSafely
 import me.naloaty.photoprism.util.EMPTY_STRING
 import ru.tinkoff.kotea.android.lifecycle.collectOnCreate
 import ru.tinkoff.kotea.android.storeViaViewModel
@@ -45,12 +42,12 @@ private const val GALLERY_CELL_SPAN = 1
 
 class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
-    private val args: GalleryFragmentArgs by navArgs()
+    //private val args: GalleryFragmentArgs by navArgs()
     private val binding: FragmentGalleryBinding by viewBinding()
 
     private val component by lazy {
         sessionFragmentComponent.galleryComponentFactory()
-            .create(albumUid = args.albumUid.orEmpty())
+            .create(albumUid = EMPTY_STRING /* args.albumUid.orEmpty() */)
     }
 
     private val store by storeViaViewModel { component.galleryStore }
@@ -143,8 +140,8 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
     private fun collectNews(news: GalleryNews) = when (news) {
         is GalleryNews.OpenPreview -> {
-            val directions = GalleryFragmentDirections.actionViewMedia(news.position)
-            findNavController().navigateSafely(directions)
+//            val directions = GalleryFragmentDirections.actionViewMedia(news.position)
+//            findNavController().navigateSafely(directions)
         }
     }
 
