@@ -1,7 +1,8 @@
-package me.naloaty.photoprism.features.gallery_v2.presentation
+package me.naloaty.photoprism.features.gallery_v2.presentation.list
 
 import me.naloaty.photoprism.features.common_paging.model.PagingError
 import me.naloaty.photoprism.features.common_paging.model.PagingState
+import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 
 sealed interface GalleryEvent
@@ -12,6 +13,7 @@ sealed interface GalleryUiEvent : GalleryEvent {
     data class OnClickMediaItem(val position: Int): GalleryUiEvent
     data object OnClickRestart : GalleryUiEvent
     data object OnLoadMore : GalleryUiEvent
+    data class OnPerformSearch(val query: GallerySearchQuery) : GalleryUiEvent
 }
 
 sealed interface GalleryCommandResult : GalleryEvent {

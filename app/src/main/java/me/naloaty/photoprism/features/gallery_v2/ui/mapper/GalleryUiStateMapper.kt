@@ -3,8 +3,8 @@ package me.naloaty.photoprism.features.gallery_v2.ui.mapper
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.features.common_recycler.asStateItems
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryState
-import me.naloaty.photoprism.features.gallery_v2.ui.GalleryUiState
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryState
+import me.naloaty.photoprism.features.gallery_v2.ui.model.GalleryUiState
 import me.naloaty.photoprism.features.gallery_v2.ui.model.MediaItemListUi
 import ru.tinkoff.kotea.android.ui.ResourcesProvider
 import ru.tinkoff.kotea.android.ui.UiStateMapper

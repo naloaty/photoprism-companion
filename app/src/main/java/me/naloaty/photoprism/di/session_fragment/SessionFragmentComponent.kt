@@ -13,7 +13,7 @@ interface SessionFragmentComponent {
     fun inject(fragment: GalleryFragment)
     fun inject(fragment: AlbumsFragment)
 
-    fun galleryComponent(): GalleryComponent
+    fun galleryComponentFactory(): GalleryComponent.Builder
 
     @Component.Builder
     interface Builder {

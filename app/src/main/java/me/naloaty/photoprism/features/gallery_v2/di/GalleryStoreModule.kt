@@ -4,13 +4,11 @@ import com.yandex.yatagan.Binds
 import com.yandex.yatagan.IntoList
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
-import me.naloaty.photoprism.features.gallery_v2.presentation.FULL_GALLERY_QUERY
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryCommand.PerformSearch
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryCommandHandler
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryState
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryStore
-import me.naloaty.photoprism.features.gallery_v2.presentation.GalleryUpdate
-import me.naloaty.photoprism.features.gallery_v2.presentation.command_handler.PerformSearchCommandHandler
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommandHandler
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryState
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryStore
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUpdate
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.command_handler.PerformSearchCommandHandler
 import ru.tinkoff.kotea.core.KoteaStore
 import javax.inject.Qualifier
 
@@ -31,7 +29,6 @@ interface GalleryStoreModule {
         ): GalleryStore {
             return KoteaStore(
                 initialState = GalleryState(),
-                initialCommands = listOf(PerformSearch(FULL_GALLERY_QUERY)),
                 commandsFlowHandlers = commandHandlers,
                 update = update
             )

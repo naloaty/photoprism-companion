@@ -1,6 +1,7 @@
 package me.naloaty.photoprism.features.common_ext
 
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.search.SearchView
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 
 fun RecyclerView.syncWithBottomNav(bottomNavViewModel: BottomNavViewModel) {
@@ -28,4 +29,19 @@ fun RecyclerView.syncWithBottomNav(bottomNavViewModel: BottomNavViewModel) {
             previousState = newState
         }
     })
+}
+
+fun SearchView.syncWithBottomNav(bottomNavViewModel: BottomNavViewModel) {
+    addTransitionListener { _, previousState, newState ->
+        if (
+            SearchView.TransitionState.HIDING == previousState &&
+            SearchView.TransitionState.HIDDEN == newState
+        ) {
+            bottomNavViewModel.onSearchViewHidden()
+        }
+
+        if (SearchView.TransitionState.SHOWING == newState) {
+            bottomNavViewModel.onSearchViewShowing()
+        }
+    }
 }

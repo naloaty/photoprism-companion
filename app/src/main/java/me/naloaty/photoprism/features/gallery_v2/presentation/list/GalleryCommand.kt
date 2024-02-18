@@ -1,4 +1,4 @@
-package me.naloaty.photoprism.features.gallery_v2.presentation
+package me.naloaty.photoprism.features.gallery_v2.presentation.list
 
 interface GalleryCommand {
 
