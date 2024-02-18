@@ -12,7 +12,7 @@ sealed interface GalleryUiEvent : GalleryEvent {
 
     data class OnClickMediaItem(val position: Int): GalleryUiEvent
     data object OnClickRestart : GalleryUiEvent
-    data object OnLoadMore : GalleryUiEvent
+    data class OnLoadMore(val position: Int) : GalleryUiEvent
     data class OnPerformSearch(val query: GallerySearchQuery) : GalleryUiEvent
 }
 

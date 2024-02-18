@@ -1,11 +1,13 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.list
 
+import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
+
 interface GalleryCommand {
 
     data object Refresh : GalleryCommand
     data object Restart : GalleryCommand
-    data object LoadMore : GalleryCommand
+    data class LoadMore(val position: Int) : GalleryCommand
 
-    data class PerformSearch(val query: String) : GalleryCommand
+    data class PerformSearch(val query: GallerySearchQuery) : GalleryCommand
 
 }

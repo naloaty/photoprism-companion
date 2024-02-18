@@ -1,16 +1,14 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.list.command_handler
 
+import androidx.recyclerview.widget.DiffUtil
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
-import me.naloaty.photoprism.api.endpoint.media.service.PhotoPrismMediaService
-import me.naloaty.photoprism.common.DownloadUrlFactory
-import me.naloaty.photoprism.common.PreviewUrlFactory
-import me.naloaty.photoprism.di.session_flow_fragment.qualifier.MediaUrlFactory
-import me.naloaty.photoprism.features.common_paging.paginator.distinctBy
-import me.naloaty.photoprism.features.common_paging.paginatorByOffset
-import me.naloaty.photoprism.features.gallery.data.mapper.toMediaItem
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import me.naloaty.photoprism.features.common_paging.paginatorByOffsetPaging3
+import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
+import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.LoadMore
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.PerformSearch
@@ -20,30 +18,56 @@ import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryComman
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommandResult.PerformSearchError
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommandResult.PerformSearchResult
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 class PerformSearchCommandHandler @Inject constructor(
-    @MediaUrlFactory private val previewUrlFactory: PreviewUrlFactory,
-    @MediaUrlFactory private val downloadUrlFactory: DownloadUrlFactory,
-    private val mediaService: PhotoPrismMediaService
+    private val repository: MediaRepository
 ) : GalleryCommandHandler {
+
+    private val diffCallback = object : DiffUtil.ItemCallback<MediaItem>() {
+
+        override fun areItemsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {
+            return oldItem.uid == newItem.uid
+        }
+
+        override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
     override fun handle(commands: Flow<GalleryCommand>): Flow<GalleryEvent> {
         return commands
             .filterIsInstance<PerformSearch>()
             .flatMapLatest { command ->
-                paginatorByOffset(
+                paginatorByOffsetPaging3(
                     refreshEvents = commands.filterIsInstance<Refresh>(),
                     restartEvents = commands.filterIsInstance<Restart>(),
-                    loadMoreEvents = commands.filterIsInstance<LoadMore>(),
-                    nextPageFilterStrategy = distinctBy { it.uid },
-                    getFromRemote = { offset ->
-                        val response = mediaService.getMediaItems(50, offset, query = command.query)
-                        val items = response.body() ?: emptyList()
-                        items.map { it.toMediaItem(previewUrlFactory, downloadUrlFactory) }
-                    },
-                    mapError = ::PerformSearchError,
-                    mapState = ::PerformSearchResult
-                ).debounce(150)
+                    loadMoreEvents = commands.filterIsInstance<LoadMore>().map { it.position },
+                    pagingDataFlow = repository.getSearchResultStream(command.query),
+                    diffCallback = diffCallback,
+                    mapState = ::PerformSearchResult,
+                    mapError = ::PerformSearchError
+                ).onEach {
+                    Timber.d("Result: $it")
+                }
             }
     }
+
+//    paginatorByOffset(
+//    refreshEvents = commands.filterIsInstance<Refresh>(),
+//    restartEvents = commands.filterIsInstance<Restart>(),
+//    loadMoreEvents = commands.filterIsInstance<LoadMore>(),
+//    nextPageFilterStrategy = distinctBy { it.uid },
+//    getFromRemote = { offset ->
+//        val response = mediaService.getMediaItems(100, offset, query = command.query)
+//        val items = response.body() ?: emptyList()
+//        items.map { it.toMediaItem(previewUrlFactory, downloadUrlFactory) }
+//    },
+//    mapError = ::PerformSearchError,
+//    mapState = ::PerformSearchResult
+//    ).debounce(150)
+//}
+
 }

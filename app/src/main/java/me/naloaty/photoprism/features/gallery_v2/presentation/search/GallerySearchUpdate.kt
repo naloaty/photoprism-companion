@@ -1,5 +1,6 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.search
 
+import me.naloaty.photoprism.features.common_search.SearchQuery.Config
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.di.AlbumUid
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent.OnApplySearch
@@ -29,14 +30,25 @@ class GallerySearchUpdate @Inject constructor(
         news(
             GallerySearchNews.HideSearchView,
             GallerySearchNews.PerformSearch(
-                GallerySearchQuery(value = withAlbumFilter(state.queryText))
+                GallerySearchQuery(
+                    value = withAlbumFilter(state.queryText),
+                    config = Config(refresh = true)
+                )
             )
         )
     }
 
     private fun NextBuilder.handleOnResetSearch() {
         state { copy(queryText = FULL_GALLERY_QUERY) }
-        handleOnApplySearch()
+        news(
+            GallerySearchNews.HideSearchView,
+            GallerySearchNews.PerformSearch(
+                GallerySearchQuery(
+                    value = withAlbumFilter(state.queryText),
+                    config = Config(refresh = false)
+                )
+            )
+        )
     }
 
     private fun NextBuilder.withAlbumFilter(queryText: String): String {

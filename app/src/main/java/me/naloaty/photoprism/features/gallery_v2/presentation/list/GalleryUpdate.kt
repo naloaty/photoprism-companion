@@ -27,7 +27,7 @@ class GalleryUpdate @Inject constructor(
         is PerformSearchResult -> state { copy(listState = event.listState) }
         is PerformSearchError -> Unit
         is OnClickRestart -> commands(Restart)
-        is OnLoadMore -> commands(LoadMore)
-        is OnPerformSearch -> commands(PerformSearch(event.query.value))
+        is OnLoadMore -> commands(LoadMore(event.position))
+        is OnPerformSearch -> commands(PerformSearch(event.query))
     }
 }

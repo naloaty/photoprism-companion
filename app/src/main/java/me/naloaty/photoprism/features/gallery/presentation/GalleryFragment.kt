@@ -8,8 +8,6 @@ import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.map
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,10 +28,7 @@ import me.naloaty.photoprism.features.common_search.initSearch
 import me.naloaty.photoprism.features.gallery.presentation.mapper.toGalleryListItem
 import me.naloaty.photoprism.features.gallery.presentation.recycler.GalleryAdapter
 import me.naloaty.photoprism.features.gallery.presentation.recycler.MediaItemViewHolder
-import me.naloaty.photoprism.features.gallery.presentation.GalleryFragmentArgs
-import me.naloaty.photoprism.features.gallery.presentation.GalleryFragmentDirections
 import me.naloaty.photoprism.navigation.main.BottomNavViewModel
-import me.naloaty.photoprism.navigation.navigateSafely
 import timber.log.Timber
 
 private const val MIN_MEDIA_ITEMS_PER_ROW = 1
@@ -41,7 +36,7 @@ private const val GALLERY_CELL_SPAN = 1
 
 class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
-    private val args: GalleryFragmentArgs by navArgs()
+    //private val args: GalleryFragmentArgs by navArgs()
 
     private val galleryViewModel: GalleryViewModel by sessionFlowFragmentViewModel()
     private val bottomNavViewModel: BottomNavViewModel by sessionFlowFragmentViewModel()
@@ -68,7 +63,7 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
         setupGallerySearch()
         //scrollToSharedElement()
-        binding.rvGallery.post { setupGalleryList(args.albumUid) }
+        //binding.rvGallery.post { setupGalleryList(args.albumUid) }
 
         loadStateRenderer = LoadStateRenderer(
             root = binding.root,
@@ -138,8 +133,8 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
     private fun setupGalleryList(albumUid: String?) = with(binding) {
         galleryPagingAdapter.onItemClickListener = { position, item ->
-            val directions = GalleryFragmentDirections.actionViewMedia(position)
-            findNavController().navigateSafely(directions)
+            //val directions = GalleryFragmentDirections.actionViewMedia(position)
+            //findNavController().navigateSafely(directions)
         }
 
         rvGallery.adapter = galleryConcatAdapter

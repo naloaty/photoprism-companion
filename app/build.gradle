@@ -96,10 +96,6 @@ dependencies {
     // Fast scroll
     implementation "me.zhanghai.android.fastscroll:library:$fastScrollVersion"
 
-    // Elmslie
-    implementation "com.github.vivid-money.elmslie:elmslie-core:$elmslieVersion"
-    implementation "com.github.vivid-money.elmslie:elmslie-android:$elmslieVersion"
-
     // DataStore
     implementation "androidx.datastore:datastore-core:$dataStoreVersion"
 
