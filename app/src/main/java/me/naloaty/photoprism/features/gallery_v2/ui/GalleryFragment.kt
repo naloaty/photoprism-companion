@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
 import me.naloaty.photoprism.base.sessionFlowFragmentViewModel
+import me.naloaty.photoprism.base.storeViaViewModel
 import me.naloaty.photoprism.databinding.FragmentGalleryBinding
 import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
 import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
@@ -35,7 +36,6 @@ import me.naloaty.photoprism.navigation.main.BottomNavViewModel
 import me.naloaty.photoprism.navigation.navigateSafely
 import me.naloaty.photoprism.util.EMPTY_STRING
 import ru.tinkoff.kotea.android.lifecycle.collectOnCreate
-import ru.tinkoff.kotea.android.storeViaViewModel
 import ru.tinkoff.mobile.tech.ti_recycler.base.ViewTyped
 import ru.tinkoff.mobile.tech.ti_recycler.base.diff.ViewTypedDiffCallback
 import ru.tinkoff.mobile.tech.ti_recycler_coroutines.TiRecyclerCoroutines
@@ -44,6 +44,8 @@ import timber.log.Timber
 
 private const val MIN_MEDIA_ITEMS_PER_ROW = 1
 private const val GALLERY_CELL_SPAN = 1
+
+const val GALLERY_STORE_KEY = "gallery"
 
 class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
@@ -55,7 +57,13 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
             .create(albumUid = args.albumUid.orEmpty() /* EMPTY_STRING  */)
     }
 
-    private val store by storeViaViewModel { component.galleryStore }
+    private val store by storeViaViewModel(
+        sharedViewModelKey = { args.albumUid ?: GALLERY_STORE_KEY },
+        ownerProducer = { requireParentFragment().requireParentFragment() }
+    ) {
+        component.galleryStore
+    }
+
     private val searchStore by storeViaViewModel { component.gallerySearchStore }
 
     private val bottomNavViewModel: BottomNavViewModel by sessionFlowFragmentViewModel()
@@ -147,7 +155,10 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
     private fun collectNews(news: GalleryNews) = when (news) {
         is GalleryNews.OpenPreview -> {
-            val directions = GalleryFragmentDirections.actionViewMedia(news.position)
+            val directions = GalleryFragmentDirections.actionViewMedia(
+                position = news.position,
+                albumUid = args.albumUid
+            )
             findNavController().navigateSafely(directions)
         }
     }

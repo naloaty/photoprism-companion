@@ -94,6 +94,7 @@ private class Paging3PaginatorImpl<T : Any, R : Any>(
         val sourceRefresh = states.source.refresh
         val mediatorRefresh = mediator.refresh
         val mediatorAppend = mediator.append
+        val mediatorPrepend = mediator.prepend
 
         if (differ.itemCount > 0) {
             when {
@@ -121,6 +122,7 @@ private class Paging3PaginatorImpl<T : Any, R : Any>(
                 sourceRefresh is Error -> state { PagingState.EmptyError(sourceRefresh.error) }
                 mediatorRefresh is Loading -> state { PagingState.Refresh(data) }
                 mediatorRefresh is Error -> state { PagingState.EmptyError(mediatorRefresh.error) }
+                mediatorPrepend is Loading -> state { PagingState.EmptyProgress }
                 mediatorAppend is Loading -> state { PagingState.EmptyProgress }
                 else -> state { PagingState.Empty }
             }

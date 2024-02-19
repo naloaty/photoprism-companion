@@ -106,6 +106,8 @@ dependencies {
 
     // TiRecycler
     implementation "ru.tinkoff.mobile:ti-recycler-coroutines:$tiRecycler"
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }
 
 tasks.withType(KotlinCompile).configureEach {

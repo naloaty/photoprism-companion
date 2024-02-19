@@ -54,6 +54,12 @@
             android:name="position"
             app:argType="integer"
             app:nullable="false"/>
+
+        <argument
+            android:name="albumUid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
 </navigation>

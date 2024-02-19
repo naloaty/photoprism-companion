@@ -8,7 +8,6 @@ import me.naloaty.photoprism.di.session_flow_fragment.qualifier.SessionViewModel
 import me.naloaty.photoprism.di.viewmodel.ViewModelKey
 import me.naloaty.photoprism.features.albums.presentation.AlbumsViewModel
 import me.naloaty.photoprism.features.gallery.presentation.GalleryViewModel
-import me.naloaty.photoprism.features.media_viewer.presentation.MediaViewModel
 
 @Module
 interface SessionViewModelModule {
@@ -19,8 +18,5 @@ interface SessionViewModelModule {
 
     @[Binds ViewModelKey(AlbumsViewModel::class) IntoMap SessionViewModels]
     fun bindAlbumsViewModel(viewModel: AlbumsViewModel): ViewModel
-
-    @[Binds ViewModelKey(MediaViewModel::class) IntoMap SessionViewModels]
-    fun bindMediaViewerViewModel(viewModel: MediaViewModel): ViewModel
 
 }

@@ -2,10 +2,10 @@ package me.naloaty.photoprism.features.gallery_v2.presentation.list.command_hand
 
 import androidx.recyclerview.widget.DiffUtil
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import me.naloaty.photoprism.features.common_paging.paginatorByOffsetPaging3
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository
@@ -18,7 +18,6 @@ import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryComman
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommandResult.PerformSearchError
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommandResult.PerformSearchResult
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryEvent
-import timber.log.Timber
 import javax.inject.Inject
 
 class PerformSearchCommandHandler @Inject constructor(
@@ -49,9 +48,7 @@ class PerformSearchCommandHandler @Inject constructor(
                     diffCallback = diffCallback,
                     mapState = ::PerformSearchResult,
                     mapError = ::PerformSearchError
-                ).onEach {
-                    Timber.d("Result: $it")
-                }
+                ).debounce(timeoutMillis = 150)
             }
     }
 
