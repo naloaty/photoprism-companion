@@ -1,5 +1,6 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.list
 
+import me.naloaty.photoprism.features.common_paging.model.PagingState
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.LoadMore
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.PerformSearch
@@ -33,6 +34,7 @@ class GalleryUpdate @Inject constructor(
     }
 
     private fun NextBuilder.handleOnPerformSearch(query: GallerySearchQuery) {
+        state { copy(listState = PagingState.initial()) }
         commands(PerformSearch(query))
     }
 }

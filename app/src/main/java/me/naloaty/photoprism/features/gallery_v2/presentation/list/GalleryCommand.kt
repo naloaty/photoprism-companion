@@ -7,7 +7,6 @@ interface GalleryCommand {
     data object Refresh : GalleryCommand
     data object Restart : GalleryCommand
     data class LoadMore(val position: Int) : GalleryCommand
-
     data class PerformSearch(val query: GallerySearchQuery) : GalleryCommand
 
 }

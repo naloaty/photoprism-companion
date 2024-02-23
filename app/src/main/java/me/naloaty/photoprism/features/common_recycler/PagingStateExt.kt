@@ -4,14 +4,13 @@ import me.naloaty.photoprism.features.common_paging.model.PagingState
 import me.naloaty.photoprism.features.common_paging.model.PagingState.FullData
 import me.naloaty.photoprism.features.common_recycler.model.CommonEmptyItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItem
-import me.naloaty.photoprism.features.common_recycler.model.CommonLoadingItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageLoadingItem
 import ru.tinkoff.mobile.tech.ti_recycler.base.ViewTyped
 
 fun <T : Any> PagingState<T>.asStateItems(
     contentMapper: (List<T>) -> List<ViewTyped>,
-    loadingItems: () -> List<ViewTyped> = { listOf(CommonLoadingItem) },
+    loadingItems: () -> List<ViewTyped> = { listOf(CommonNextPageLoadingItem) },
     emptyItems: () -> List<ViewTyped> = { listOf(CommonEmptyItem) },
     errorItems: () -> List<ViewTyped> = { listOf(CommonErrorItem) },
     nextPageLoadingItem: () -> ViewTyped = { CommonNextPageLoadingItem },

@@ -24,7 +24,6 @@ import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItem
 import me.naloaty.photoprism.features.common_recycler.pagingEndlessScrollFlow
-import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryNews
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent.OnPerformSearch
@@ -48,6 +47,7 @@ private const val MIN_MEDIA_ITEMS_PER_ROW = 1
 private const val GALLERY_CELL_SPAN = 1
 
 const val GALLERY_STORE_KEY = "gallery"
+const val GALLERY_SEARCH_STORE_KEY = "gallery_search"
 
 class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
@@ -60,18 +60,31 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
     }
 
     private val store by storeViaViewModel(
-        sharedViewModelKey = { args.albumUid ?: GALLERY_STORE_KEY },
+        sharedViewModelKey = { getSharedKey(GALLERY_STORE_KEY)  },
         ownerProducer = { requireParentFragment().requireParentFragment() }
     ) {
         component.galleryStore
     }
 
-    private val searchStore by storeViaViewModel { component.gallerySearchStore }
+    private val searchStore by storeViaViewModel(
+        sharedViewModelKey = { getSharedKey(GALLERY_SEARCH_STORE_KEY)  },
+        ownerProducer = { requireParentFragment().requireParentFragment() }
+    ) {
+        component.gallerySearchStore
+    }
 
     private val bottomNavViewModel: BottomNavViewModel by sessionFlowFragmentViewModel()
 
     private var adapter: RecyclerView.Adapter<*> by viewLifecycleProperty()
     private var tiRecycler: TiRecyclerCoroutines<ViewTyped> by viewLifecycleProperty()
+
+    private fun getSharedKey(tag: String): String {
+        return if (args.albumUid != null) {
+            tag + "_" + args.albumUid
+        } else {
+            tag
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,18 +187,20 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
         if (searchView.hint != state.searchBarHint) {
             searchView.hint = state.searchBarHint
         }
+
+        if (searchBar.text != state.searchBarText) {
+            searchBar.setText(state.searchBarText)
+        }
+
+        if (searchView.text.toString() != state.searchViewText) {
+            searchView.setText(state.searchViewText)
+            searchView.editText.setSelection(state.searchViewText.length)
+        }
     }
 
     private fun collectSearchNews(news: GallerySearchNews) = when(news) {
         is HideSearchView -> binding.searchView.hide()
-        is PerformSearch -> handlePerformSearch(news.query)
-    }
-
-    private fun handlePerformSearch(query: GallerySearchQuery) = with(binding) {
-        store.dispatch(OnPerformSearch(query))
-        searchBar.setText(query.value)
-        searchView.setText(query.value)
-        searchView.editText.setSelection(query.value.length)
+        is PerformSearch -> store.dispatch(OnPerformSearch(news.query))
     }
 
     private fun createGridLayoutManager(): GridLayoutManager {

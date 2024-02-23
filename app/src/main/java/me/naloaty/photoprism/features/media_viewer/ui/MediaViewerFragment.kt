@@ -30,10 +30,18 @@ class MediaViewerFragment: BaseSessionFragment(R.layout.fragment_media_viewer) {
     private var adapter: BaseTiAdapter<ViewTyped, CoroutinesHolderFactory> by viewLifecycleProperty()
 
     private val galleryStore by storeViaViewModel<GalleryStore>(
-        sharedViewModelKey = { args.albumUid ?: GALLERY_STORE_KEY },
+        sharedViewModelKey = { getSharedKey(GALLERY_STORE_KEY) },
         ownerProducer = { requireParentFragment().requireParentFragment() }
     ) {
         throw IllegalStateException("Shared gallery store is not found")
+    }
+
+    private fun getSharedKey(tag: String): String {
+        return if (args.albumUid != null) {
+            tag + "_" + args.albumUid
+        } else {
+            tag
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
