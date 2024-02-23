@@ -8,13 +8,13 @@ import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorI
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageLoadingItem
 import ru.tinkoff.mobile.tech.ti_recycler.base.ViewTyped
 
-fun <T : Any> PagingState<T>.asStateItems(
-    contentMapper: (List<T>) -> List<ViewTyped>,
-    loadingItems: () -> List<ViewTyped> = { listOf(CommonNextPageLoadingItem) },
-    emptyItems: () -> List<ViewTyped> = { listOf(CommonEmptyItem) },
-    errorItems: () -> List<ViewTyped> = { listOf(CommonErrorItem) },
-    nextPageLoadingItem: () -> ViewTyped = { CommonNextPageLoadingItem },
-    nextPageErrorItem: () -> ViewTyped = { CommonNextPageErrorItem }
+inline fun <T : Any> PagingState<T>.asStateItems(
+    noinline contentMapper: (List<T>) -> List<ViewTyped>,
+    crossinline loadingItems: () -> List<ViewTyped> = { listOf(CommonNextPageLoadingItem) },
+    crossinline emptyItems: () -> List<ViewTyped> = { listOf(CommonEmptyItem) },
+    crossinline errorItems: () -> List<ViewTyped> = { listOf(CommonErrorItem) },
+    crossinline nextPageLoadingItem: () -> ViewTyped = { CommonNextPageLoadingItem },
+    crossinline nextPageErrorItem: () -> ViewTyped = { CommonNextPageErrorItem }
 ): List<ViewTyped> {
     return when (this) {
         is PagingState.Empty -> emptyItems()
