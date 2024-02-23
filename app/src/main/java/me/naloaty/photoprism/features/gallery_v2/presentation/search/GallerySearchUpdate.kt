@@ -29,13 +29,13 @@ class GallerySearchUpdate @Inject constructor(
     private fun NextBuilder.handleOnApplySearch() {
         news(GallerySearchNews.HideSearchView)
 
-        val query = GallerySearchQuery(
-            value = state.queryText,
-            albumUid = albumUid.ifBlank { null },
-            config = Config(refresh = true)
-        )
+        if (state.queryText != state.currentQuery?.value) {
+            val query = GallerySearchQuery(
+                value = state.queryText,
+                albumUid = albumUid.ifBlank { null },
+                config = Config(refresh = true)
+            )
 
-        if (query.value != state.currentQuery?.value) {
             state { copy(currentQuery = query) }
             news(GallerySearchNews.PerformSearch(query))
         }
@@ -45,13 +45,13 @@ class GallerySearchUpdate @Inject constructor(
         state { copy(queryText = FULL_GALLERY_QUERY) }
         news(GallerySearchNews.HideSearchView)
 
-        val query = GallerySearchQuery(
-            value = state.queryText,
-            albumUid = albumUid.ifBlank { null },
-            config = Config(refresh = false)
-        )
+        if (state.queryText != state.currentQuery?.value) {
+            val query = GallerySearchQuery(
+                value = state.queryText,
+                albumUid = albumUid.ifBlank { null },
+                config = Config(refresh = false)
+            )
 
-        if (query.value != state.currentQuery?.value) {
             state { copy(currentQuery = query) }
             news(GallerySearchNews.PerformSearch(query))
         }
