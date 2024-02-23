@@ -5,5 +5,6 @@ import me.naloaty.photoprism.features.common_search.SearchQuery.Config
 
 data class GallerySearchQuery(
     override val value: String,
+    val albumUid: String? = null,
     override val config: Config = Config(refresh = true)
 ) : SearchQuery

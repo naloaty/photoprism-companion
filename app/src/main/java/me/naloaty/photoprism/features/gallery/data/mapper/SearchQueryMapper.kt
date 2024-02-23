@@ -8,7 +8,11 @@ import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
  */
 fun GallerySearchQuery.toGallerySearchQueryDbEntity() =
     GallerySearchQueryDbEntity(
-        value = this.value
+        value = if (albumUid == null) {
+            value
+        } else {
+            "album:$albumUid $value"
+        }
     )
 
 

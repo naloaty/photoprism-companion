@@ -24,8 +24,10 @@ import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
 import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItem
 import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItem
 import me.naloaty.photoprism.features.common_recycler.pagingEndlessScrollFlow
+import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryNews
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent
+import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent.OnPerformSearch
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchNews
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchNews.HideSearchView
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchNews.PerformSearch
@@ -85,7 +87,6 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
             stateCollector = ::collectSearchState,
             newsCollector = ::collectSearchNews
         )
-        searchStore.dispatch(GallerySearchUiEvent.OnApplySearch)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,14 +166,26 @@ class GalleryFragment : BaseSessionFragment(R.layout.fragment_gallery) {
 
     private fun collectSearchState(state: GallerySearchUiState) = with(binding) {
         searchViewContent.btnApply.isEnabled = state.applyBtnEnabled
-        searchBar.hint = state.searchBarHint
-        searchView.hint = state.searchBarHint
-        searchBar.setText(state.searchBarText)
+
+        if (searchBar.hint != state.searchBarHint) {
+            searchBar.hint = state.searchBarHint
+        }
+
+        if (searchView.hint != state.searchBarHint) {
+            searchView.hint = state.searchBarHint
+        }
     }
 
     private fun collectSearchNews(news: GallerySearchNews) = when(news) {
         is HideSearchView -> binding.searchView.hide()
-        is PerformSearch -> store.dispatch(GalleryUiEvent.OnPerformSearch(news.query))
+        is PerformSearch -> handlePerformSearch(news.query)
+    }
+
+    private fun handlePerformSearch(query: GallerySearchQuery) = with(binding) {
+        store.dispatch(OnPerformSearch(query))
+        searchBar.setText(query.value)
+        searchView.setText(query.value)
+        searchView.editText.setSelection(query.value.length)
     }
 
     private fun createGridLayoutManager(): GridLayoutManager {

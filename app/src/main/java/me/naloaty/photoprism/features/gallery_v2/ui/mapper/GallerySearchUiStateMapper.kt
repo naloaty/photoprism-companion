@@ -15,7 +15,6 @@ class GallerySearchUiStateMapper @Inject constructor() :
         return GallerySearchUiState(
             applyBtnEnabled = state.queryText.isNotBlank(),
             searchBarHint = getSearchHint(state.album),
-            searchBarText = state.queryText
         )
     }
 

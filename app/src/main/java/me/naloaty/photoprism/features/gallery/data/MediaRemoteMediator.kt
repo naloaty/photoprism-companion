@@ -77,7 +77,13 @@ class MediaRemoteMediator @AssistedInject constructor(
             val response = mediaService.getMediaItems(
                 count = pageSize,
                 offset = offset,
-                query = query.value
+                query = query.run {
+                    if (albumUid == null) {
+                        value
+                    } else {
+                        "album:$albumUid $value"
+                    }
+                }
             )
 
             val mediaItems = response.body() ?: listOf()

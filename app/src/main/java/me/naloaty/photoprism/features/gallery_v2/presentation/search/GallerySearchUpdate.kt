@@ -21,41 +21,39 @@ class GallerySearchUpdate @Inject constructor(
 ): DslUpdate<GallerySearchState, GallerySearchEvent, GallerySearchCommand, GallerySearchNews>() {
 
     override fun NextBuilder.update(event: GallerySearchEvent) = when(event) {
-        OnApplySearch -> handleOnApplySearch()
-        OnResetSearch -> handleOnResetSearch()
+        is OnApplySearch -> handleOnApplySearch()
+        is OnResetSearch -> handleOnResetSearch()
         is OnSearchTextChanged -> state { copy(queryText = event.text.trim()) }
     }
 
     private fun NextBuilder.handleOnApplySearch() {
-        news(
-            GallerySearchNews.HideSearchView,
-            GallerySearchNews.PerformSearch(
-                GallerySearchQuery(
-                    value = withAlbumFilter(state.queryText),
-                    config = Config(refresh = true)
-                )
-            )
+        news(GallerySearchNews.HideSearchView)
+
+        val query = GallerySearchQuery(
+            value = state.queryText,
+            albumUid = albumUid.ifBlank { null },
+            config = Config(refresh = true)
         )
+
+        if (query.value != state.currentQuery?.value) {
+            state { copy(currentQuery = query) }
+            news(GallerySearchNews.PerformSearch(query))
+        }
     }
 
     private fun NextBuilder.handleOnResetSearch() {
         state { copy(queryText = FULL_GALLERY_QUERY) }
-        news(
-            GallerySearchNews.HideSearchView,
-            GallerySearchNews.PerformSearch(
-                GallerySearchQuery(
-                    value = withAlbumFilter(state.queryText),
-                    config = Config(refresh = false)
-                )
-            )
-        )
-    }
+        news(GallerySearchNews.HideSearchView)
 
-    private fun NextBuilder.withAlbumFilter(queryText: String): String {
-        return if (albumUid.isBlank()) {
-            queryText
-        } else {
-            "album:$albumUid $queryText"
+        val query = GallerySearchQuery(
+            value = state.queryText,
+            albumUid = albumUid.ifBlank { null },
+            config = Config(refresh = false)
+        )
+
+        if (query.value != state.currentQuery?.value) {
+            state { copy(currentQuery = query) }
+            news(GallerySearchNews.PerformSearch(query))
         }
     }
 }

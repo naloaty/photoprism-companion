@@ -4,6 +4,7 @@ import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchState
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchStore
+import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUpdate
 import ru.tinkoff.kotea.core.KoteaStore
 import javax.inject.Qualifier
@@ -23,7 +24,9 @@ interface GallerySearchStoreModule {
             return KoteaStore(
                 initialState = GallerySearchState(),
                 update = update
-            )
+            ).apply {
+                dispatch(GallerySearchUiEvent.OnApplySearch)
+            }
         }
     }
 

@@ -15,7 +15,15 @@ abstract class GallerySearchQueryDao {
 
     @Transaction
     open suspend fun findOrInsert(query: GallerySearchQuery): GallerySearchQueryDbEntity {
-        val searchQuery = findByQueryValue(query.value) ?: query.toGallerySearchQueryDbEntity()
+        val value = query.run {
+            if (albumUid == null) {
+                value
+            } else {
+                "album:$albumUid $value"
+            }
+        }
+
+        val searchQuery = findByQueryValue(value) ?: query.toGallerySearchQueryDbEntity()
         searchQuery.accessedAt = Instant.now()
 
         if (searchQuery.id == GallerySearchQueryDbEntity.UNSET_ID) {

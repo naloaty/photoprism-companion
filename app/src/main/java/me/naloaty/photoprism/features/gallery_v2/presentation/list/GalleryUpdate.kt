@@ -1,5 +1,6 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.list
 
+import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.LoadMore
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.PerformSearch
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand.Restart
@@ -28,6 +29,10 @@ class GalleryUpdate @Inject constructor(
         is PerformSearchError -> Unit
         is OnClickRestart -> commands(Restart)
         is OnLoadMore -> commands(LoadMore(event.position))
-        is OnPerformSearch -> commands(PerformSearch(event.query))
+        is OnPerformSearch -> handleOnPerformSearch(event.query)
+    }
+
+    private fun NextBuilder.handleOnPerformSearch(query: GallerySearchQuery) {
+        commands(PerformSearch(query))
     }
 }
