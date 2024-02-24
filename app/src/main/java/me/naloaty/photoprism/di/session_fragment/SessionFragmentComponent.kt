@@ -16,7 +16,7 @@ interface SessionFragmentComponent {
 
     fun galleryComponentFactory(): GalleryComponent.Builder
 
-    fun mediaViewerComponent(): MediaViewerComponent
+    fun mediaViewerComponentFactory(): MediaViewerComponent.Builder
 
     @Component.Builder
     interface Builder {

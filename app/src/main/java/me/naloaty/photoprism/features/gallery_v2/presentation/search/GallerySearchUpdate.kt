@@ -1,6 +1,6 @@
 package me.naloaty.photoprism.features.gallery_v2.presentation.search
 
-import me.naloaty.photoprism.features.common_search.SearchQuery.Config
+import me.naloaty.photoprism.common.common_search.SearchQuery.Config
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery_v2.di.AlbumUid
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent.OnApplySearch

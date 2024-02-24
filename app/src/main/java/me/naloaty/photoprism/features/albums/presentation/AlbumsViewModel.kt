@@ -2,11 +2,11 @@ package me.naloaty.photoprism.features.albums.presentation
 
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import me.naloaty.photoprism.common.common_search.SearchQuery.Config
+import me.naloaty.photoprism.common.common_search.SearchViewModel
 import me.naloaty.photoprism.features.albums.domain.model.Album
 import me.naloaty.photoprism.features.albums.domain.model.AlbumSearchQuery
 import me.naloaty.photoprism.features.albums.domain.usecase.GetSearchResultUseCase
-import me.naloaty.photoprism.features.common_search.SearchQuery.Config
-import me.naloaty.photoprism.features.common_search.SearchViewModel
 import javax.inject.Inject
 
 private const val ALL_ALBUMS_QUERY = ""

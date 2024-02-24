@@ -7,7 +7,7 @@ import me.naloaty.photoprism.di.app.AppScope
 import me.naloaty.photoprism.features.auth.domain.exception.SessionObtainException
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccount
 import me.naloaty.photoprism.features.auth.domain.model.LibraryAccountSession
-import me.naloaty.photoprism.features.common_ext.getAuthToken
+import me.naloaty.photoprism.common.common_ext.getAuthToken
 import javax.inject.Inject
 
 @AppScope

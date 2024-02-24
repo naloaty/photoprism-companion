@@ -2,11 +2,11 @@ package me.naloaty.photoprism.features.media_viewer.ui
 
 import android.view.View
 import me.naloaty.photoprism.R
-import me.naloaty.photoprism.features.common_recycler.model.CommonEmptyItem
-import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItemViewHolder
-import me.naloaty.photoprism.features.common_recycler.model.CommonLoadingItem
-import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItemViewHolder
-import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageLoadingItem
+import me.naloaty.photoprism.common.common_recycler.model.CommonEmptyItem
+import me.naloaty.photoprism.common.common_recycler.model.CommonErrorItemViewHolder
+import me.naloaty.photoprism.common.common_recycler.model.CommonLoadingItem
+import me.naloaty.photoprism.common.common_recycler.model.CommonNextPageErrorItemViewHolder
+import me.naloaty.photoprism.common.common_recycler.model.CommonNextPageLoadingItem
 import me.naloaty.photoprism.features.media_viewer.ui.model.ImageItemUiViewHolder
 import ru.tinkoff.mobile.tech.ti_recycler.base.BaseViewHolder
 import ru.tinkoff.mobile.tech.ti_recycler_coroutines.base.CoroutinesHolderFactory

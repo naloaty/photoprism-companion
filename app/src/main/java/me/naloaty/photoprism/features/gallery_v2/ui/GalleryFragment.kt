@@ -18,12 +18,12 @@ import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseSessionFragment
 import me.naloaty.photoprism.base.sessionFlowFragmentViewModel
 import me.naloaty.photoprism.base.storeViaViewModel
+import me.naloaty.photoprism.common.common_ext.syncWithBottomNav
+import me.naloaty.photoprism.common.common_ext.viewLifecycleProperty
+import me.naloaty.photoprism.common.common_recycler.model.CommonErrorItem
+import me.naloaty.photoprism.common.common_recycler.model.CommonNextPageErrorItem
+import me.naloaty.photoprism.common.common_recycler.pagingEndlessScrollFlow
 import me.naloaty.photoprism.databinding.FragmentGalleryBinding
-import me.naloaty.photoprism.features.common_ext.syncWithBottomNav
-import me.naloaty.photoprism.features.common_ext.viewLifecycleProperty
-import me.naloaty.photoprism.features.common_recycler.model.CommonErrorItem
-import me.naloaty.photoprism.features.common_recycler.model.CommonNextPageErrorItem
-import me.naloaty.photoprism.features.common_recycler.pagingEndlessScrollFlow
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryNews
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryUiEvent.OnPerformSearch

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import me.naloaty.photoprism.features.common_paging.paginatorByOffsetPaging3
+import me.naloaty.photoprism.common.common_paging.paginatorByOffsetPaging3
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.repository.MediaRepository
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryCommand

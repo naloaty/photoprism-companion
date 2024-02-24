@@ -1,6 +1,8 @@
 package me.naloaty.photoprism.features.media_viewer.ui.mapper
 
-import me.naloaty.photoprism.features.common_recycler.asStateItems
+import me.naloaty.photoprism.common.common_recycler.asStateItems
+import me.naloaty.photoprism.common.common_recycler.model.CommonErrorItem
+import me.naloaty.photoprism.common.common_recycler.model.CommonLoadingItem
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem.ViewableAsImage
 import me.naloaty.photoprism.features.gallery_v2.presentation.list.GalleryState
@@ -16,7 +18,10 @@ class PagerUiStateMapper @Inject constructor(): UiStateMapper<GalleryState, Page
     override fun ResourcesProvider.map(state: GalleryState): PagerUiState {
         return PagerUiState(
             pagerItems = state.listState.asStateItems(
-                contentMapper = { list -> list.map { it.toUiModel() } }
+                contentMapper = { list -> list.map { it.toUiModel() } },
+                loadingItems = { listOf(CommonLoadingItem) },
+                nextPageLoadingItem = { CommonLoadingItem },
+                nextPageErrorItem = { CommonErrorItem }
             )
         )
     }

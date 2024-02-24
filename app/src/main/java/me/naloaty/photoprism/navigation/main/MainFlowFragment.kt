@@ -18,9 +18,9 @@ import me.naloaty.photoprism.R
 import me.naloaty.photoprism.base.BaseActivity
 import me.naloaty.photoprism.base.BaseFlowFragment
 import me.naloaty.photoprism.base.setSoftInputAdjustResize
+import me.naloaty.photoprism.common.common_ext.setOnAnimationEndListener
+import me.naloaty.photoprism.common.common_ext.startAnimation
 import me.naloaty.photoprism.databinding.FlowFragmentMainBinding
-import me.naloaty.photoprism.features.common_ext.setOnAnimationEndListener
-import me.naloaty.photoprism.features.common_ext.startAnimation
 import me.naloaty.photoprism.navigation.main.model.ViewState
 import timber.log.Timber
 

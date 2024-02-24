@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.naloaty.photoprism.features.common_search.SearchQuery.Config
-import me.naloaty.photoprism.features.common_search.SearchViewModel
+import me.naloaty.photoprism.common.common_search.SearchQuery.Config
+import me.naloaty.photoprism.common.common_search.SearchViewModel
 import me.naloaty.photoprism.features.gallery.domain.model.GallerySearchQuery
 import me.naloaty.photoprism.features.gallery.domain.model.MediaItem
 import me.naloaty.photoprism.features.gallery.domain.usecase.GetAlbumUseCase

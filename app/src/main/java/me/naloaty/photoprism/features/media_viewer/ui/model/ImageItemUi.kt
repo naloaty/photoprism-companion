@@ -6,8 +6,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
+import me.naloaty.photoprism.common.common_ext.dpToPx
 import me.naloaty.photoprism.databinding.LayoutPicturePreviewBinding
-import me.naloaty.photoprism.features.common_ext.dpToPx
 import ru.tinkoff.mobile.tech.ti_recycler.base.BaseViewHolder
 import ru.tinkoff.mobile.tech.ti_recycler.base.ViewTyped
 
