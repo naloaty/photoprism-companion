@@ -6,13 +6,11 @@ import me.naloaty.photoprism.features.gallery_v2.di.AlbumUid
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent.OnApplySearch
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent.OnResetSearch
 import me.naloaty.photoprism.features.gallery_v2.presentation.search.GallerySearchUiEvent.OnSearchTextChanged
-import ru.tinkoff.kotea.core.CommandsFlowHandler
 import ru.tinkoff.kotea.core.Store
 import ru.tinkoff.kotea.core.dsl.DslUpdate
 import javax.inject.Inject
 
 typealias GallerySearchStore = Store<GallerySearchState, GallerySearchEvent, GallerySearchNews>
-typealias GalleryCommandHandler = CommandsFlowHandler<GallerySearchCommand, GallerySearchEvent>
 
 const val FULL_GALLERY_QUERY = ""
 
