@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Companion for PhotoPrism</string>
+    <string name="retry">Повторить</string>
+    <string name="hint_media_library_search">Поиск в библиотеке</string>
+    <string name="btn_apply_search">Применить</string>
+    <string name="btn_reset_search">Сбросить</string>
+    <string name="hint_albums_search">Поиск альбомов</string>
+    <string name="hint_album_content_search">Поиск в \"%s\"</string>
+    <string name="menu_item_photos">Фото</string>
+    <string name="menu_item_albums">Альбомы</string>
+    <string name="auth_title">Companion</string>
+    <string name="auth_subtitle">for PhotoPrism</string>
+    <string name="auth_welcome_text">Welcome</string>
+    <string name="btn_proceed_to_connect">Подключиться</string>
+    <string name="content_description_library_root">Иконка ссылки</string>
+    <string name="hint_library_root">Корневой URL-адрес</string>
+    <string name="hint_username_optional">Логин (необ.)</string>
+    <string name="content_description_username">Person icon</string>
+    <string name="hint_password_optional">Пароль (необ.)</string>
+    <string name="content_description_password">Иконка замка</string>
+    <string name="authenticator_label">Companion for PhotoPrism</string>
+    <string name="error_empty_library_root">Это обязательное поле</string>
+    <string name="error_invalid_library_root">Неверный URL-адрес</string>
+    <string name="error_empty_username">Введите логин тоже</string>
+    <string name="error_empty_password">Введите пароль тоже</string>
+    <string name="error_could_not_connect">Не удалось подключиться</string>
+    <string name="common_error_description">Не загрузилось</string>
+    <string name="empty">Здесь пусто..</string>
+</resources>

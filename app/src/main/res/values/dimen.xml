@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="li_gallery_media_item_margin">4dp</dimen>
+    <dimen name="li_gallery_media_item_min_size">120dp</dimen>
+    <dimen name="gallery_media_list_horizontal_padding">4dp</dimen>
+    <dimen name="gallery_media_list_top_space">88dp</dimen>
+    <dimen name="li_album_min_size">150dp</dimen>
+    <dimen name="li_album_item_horizontal_margin">8dp</dimen>
+    <dimen name="li_album_item_vertical_margin">4dp</dimen>
+    <dimen name="album_list_horizontal_padding">8dp</dimen>
+    <dimen name="album_list_top_space">88dp</dimen>
+    <dimen name="container_padding">16dp</dimen>
+    <dimen name="media_viewer_page_margin">20dp</dimen>
+</resources>

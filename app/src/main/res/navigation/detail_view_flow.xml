@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_flow"
+    app:startDestination="@id/media_view_fragment">
+
+    <fragment
+        android:id="@+id/media_view_fragment"
+        android:name="me.naloaty.photoprism.features.media_viewer.ui.MediaViewerFragment"
+        android:label="MediaViewFragment"
+        tools:layout="@layout/fragment_media_viewer"/>
+</navigation>

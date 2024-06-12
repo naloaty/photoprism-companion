@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_flow"
+    app:startDestination="@id/gallery_fragment">
+
+    <fragment
+        android:id="@+id/gallery_fragment"
+        android:name="me.naloaty.photoprism.features.gallery.ui.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery">
+
+        <action
+            android:id="@+id/action_view_media"
+            app:destination="@id/media_view_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/albums_fragment"
+        android:name="me.naloaty.photoprism.features.albums.ui.AlbumFragment"
+        android:label="fragment_albums"
+        tools:layout="@layout/fragment_albums" >
+        <action
+            android:id="@+id/action_view_album_content"
+            app:destination="@id/album_content_fragment"
+            app:enterAnim="@anim/zoom_in_enter"
+            app:exitAnim="@anim/zoom_in_exit"
+            app:popEnterAnim="@anim/zoom_out_enter"
+            app:popExitAnim="@anim/zoom_out_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/album_content_fragment"
+        android:name="me.naloaty.photoprism.features.gallery.ui.GalleryFragment"
+        tools:layout="@layout/fragment_gallery" >
+        <argument
+            android:name="albumUid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <action
+            android:id="@+id/action_view_media"
+            app:destination="@id/media_view_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/media_view_fragment"
+        android:name="me.naloaty.photoprism.features.media_viewer.ui.MediaViewerFragment"
+        tools:layout="@layout/fragment_gallery">
+
+        <argument
+            android:name="mediaUid"
+            app:argType="string"
+            app:nullable="false"/>
+
+        <argument
+            android:name="albumUid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+</navigation>

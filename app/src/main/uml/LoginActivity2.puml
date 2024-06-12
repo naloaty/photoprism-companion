@@ -1,0 +1,30 @@
+@startuml
+!pragma useVerticalIf on
+mainframe ad Login fields validation
+start
+
+repeat
+:Enter library root URL;
+:Enter username;
+:Enter password;
+repeat while (Library root URL input field is empty) is (Yes)
+repeat
+repeat while (Library root URL is valid) is (Yes)
+
+
+
+
+:Check library root input field;
+
+:Ask user to enter library root;
+:Check credentials input fields;
+:Check username input field;
+:Connect using public mode;
+:Ask user to enter username;
+:Check password input field;
+:Connect using private mode;
+:Ask user to enter password;
+:Ask user to enter valid URL;
+stop
+
+@enduml

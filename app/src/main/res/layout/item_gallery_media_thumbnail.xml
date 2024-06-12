@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_gallery_media"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/li_gallery_media_item_margin"
+    tools:layout_width="160dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_thumbnail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0.5dp"
+        app:strokeColor="@color/black_8"
+        android:clickable="true"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_item_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/empty_image"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_item_type"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/media_item_type_background"
+        android:padding="4dp"
+        app:layout_constraintStart_toStartOf="@id/cv_thumbnail"
+        app:layout_constraintTop_toTopOf="@id/cv_thumbnail"
+        app:tint="@color/white_90"
+        tools:src="@drawable/ic_unknown" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

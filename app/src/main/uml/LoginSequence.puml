@@ -1,0 +1,41 @@
+@startuml
+actor Guest as user
+participant LibraryConnectParams as connectParams
+participant ConnectToLibraryUseCase as connectToLibrary
+participant PhotoPrismAuthenticator as authenticator
+participant SessionMapperKt as mapper
+participant LibraryAccountSession as session
+
+skinparam sequenceMessageAlign center
+mainframe sd Login
+
+user ->> connectParams **: «create»
+
+'connectParams -->> user : /params
+
+
+user -> connectToLibrary : invoke(params)
+activate connectToLibrary
+
+connectToLibrary -> authenticator : logIn(\napiUrl: String,\nusername: String,\npassword: String)
+activate authenticator
+
+authenticator -->> connectToLibrary : /prismSession: PhotoPrismSession
+deactivate authenticator
+
+connectToLibrary -> mapper : toLibraryAccountSession(prismSession)
+activate mapper
+
+mapper ->> session **: «create»
+
+
+'session -->> mapper : /session
+
+
+mapper -->> connectToLibrary : /session
+deactivate mapper
+
+connectToLibrary -->> user : /session
+deactivate connectToLibrary
+
+@enduml
